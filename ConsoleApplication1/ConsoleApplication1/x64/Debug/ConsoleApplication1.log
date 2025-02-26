@@ -1,2 +1,6 @@
 ﻿  ConsoleApplication1.cpp
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(193,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(256,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(315,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(376,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
   ConsoleApplication1.vcxproj -> C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
