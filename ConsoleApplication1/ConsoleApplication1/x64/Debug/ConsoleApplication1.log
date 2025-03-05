@@ -1,6 +1,13 @@
 ﻿  ConsoleApplication1.cpp
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(210,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(274,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(331,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(400,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(123,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(250,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(301,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(347,86): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(397,90): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(442,51): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(522,56): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(532,55): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(132,9): warning C4101: moveBufferY: неиспользованная локальная переменная
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(131,9): warning C4101: moveBufferX: неиспользованная локальная переменная
+C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(59,1): warning C4715: NPCChoose: значение возвращается не при всех путях выполнения
   ConsoleApplication1.vcxproj -> C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe

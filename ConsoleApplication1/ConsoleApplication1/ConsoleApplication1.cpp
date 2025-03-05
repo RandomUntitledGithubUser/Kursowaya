@@ -26,6 +26,38 @@ void mapPrint(char arr[], int m) {
     cout << '\n';
 }
 
+//int dialoguePrint() {
+//    for (int j = 0; j < m; j++) {
+//        if (i == textPlacementY && j == 3 && dialogueCounter < 10) {
+//            cout << NPCs[buffer].Dialogue[dialogueCounter];
+//            j += NPCs[buffer].Dialogue[dialogueCounter].length() - 1;
+//            dialogueCounter++;
+//            if (dialogueCounter >= 10)
+//                dialogueCounter = 0;
+//        }
+//        else {
+//            cout << arr[i][j];
+//        }
+//    }
+//}
+
+int NPCChoose(int pos) {
+    switch (pos) {
+    case 23: {
+        return 0;
+    }
+    case 26: {
+        return 1;
+    }
+    case 9: {
+        return 2;
+    }
+    case 19: {
+        return 3;
+    }
+    }
+}
+
 int main()
 {
     //Ввожу врагов, их корды, имена и статы
@@ -88,23 +120,39 @@ int main()
     NPCs[3].Dialogue[8] = "Okay, im tired, just go away";
     NPCs[3].Dialogue[9] = "Man, KYS!!!!";
 
+    srand(time(NULL));
+
     int playerAtk = 10;
     int round = 1;
     int playerHealth = 100;
+
     int spawnY = 23;
     int spawnX = 59;
+    int moveBufferX;
+    int moveBufferY;
+
     int buffer = 0;
     int dialogueCounter = 0;
+    int enemyActionChoose;
+
     const int n = 45;
     const int m = 156;
-    const int textPlacement = 39;
+
+    const int textPlacementY = 39;
+    const int textPlacementX = 3;
+
     bool combat = false;
+    bool isMove = false;
     bool game = true;
+
     char arr[n][m];
     char combatArr[n][m];
+
     string statsAttack = "Attack: " + to_string(playerAtk);
     string statsHealth = "Health: " + to_string(playerHealth);
+    string combatText1 = "Choose youre action: left arrow - attack, right arrow - protect";
     string bufferForStats;
+
     bool KOSTbILb = false;
 
     //Настройка границ и карты
@@ -123,10 +171,10 @@ int main()
     }
     //Текстовые поля в интерфейсе игрока
     for (int i = 0, j = 122; i < statsAttack.length(); j++, i++)
-        arr[textPlacement][j] = statsAttack[i];
+        arr[textPlacementY][j] = statsAttack[i];
 
     for (int i = 0, j = 122; i < statsHealth.length(); j++, i++)
-        arr[textPlacement-1][j] = statsHealth[i];
+        arr[textPlacementY-1][j] = statsHealth[i];
 
 
     //Настройка границ и поля битвы
@@ -142,6 +190,9 @@ int main()
                 combatArr[i][j] = ' ';
             }
         }
+    }
+    for (int i = textPlacementX; i < combatText1.length()+3; i++) {
+        combatArr[textPlacementY-1][i] = combatText1[i-3];
     }
     
     //Спавн объектов на координатах
@@ -163,10 +214,14 @@ int main()
     while (game) {
         if (_kbhit()) {
             switch (_getch()) {
-                //Sleep(10);
             // Стрелка вверх
                 //GetAsyncKeyState('S');
             case 72: {
+                /*moveBufferY = spawnY;
+                moveBufferX = spawnX;
+                spawnY -= 1;
+                isMove = true;*/
+                
                 if (arr[spawnY - 1][spawnX] == ' ') {
                     system("cls");
                     spawnY -= 1;
@@ -183,34 +238,18 @@ int main()
                 }
                 else if (arr[spawnY - 1][spawnX] == '@') {
                     system("cls");
-                    
-                    switch (spawnY - 1) {
-                    case 23: {
-                        buffer = 0;
-                        break;
-                    }
-                    case 26: {
-                        buffer = 1;
-                        break;
-                    }
-                    case 9: {
-                        buffer = 2;
-                        break;
-                    }
-                    case 19: {
-                        buffer = 3;
-                        break;
-                    }
 
-                    }
+                    NPCChoose(spawnY - 1);
                     for (int i = 0; i < n; i++) {
                         for (int j = 0; j < m; j++) {
-                            if(i == textPlacement && j == 3 && dialogueCounter < 10) {
-                                cout << NPCs[buffer].Dialogue[dialogueCounter];
-                                j += NPCs[buffer].Dialogue[dialogueCounter].length() - 1;
-                                dialogueCounter++;
+                            if(i == textPlacementY && j == 3 && dialogueCounter < 10) {
                                 if (dialogueCounter >= 10)
                                     dialogueCounter = 0;
+                                
+                                cout << NPCs[buffer].Dialogue[dialogueCounter];
+                                j += NPCs[buffer].Dialogue[dialogueCounter].length() - 1;
+                                
+                                
                             }
                             else{
                                 cout << arr[i][j];
@@ -218,16 +257,21 @@ int main()
                         }
                         cout << '\n';
                     }
+                    dialogueCounter++;
                 }
                 if (arr[spawnY - 1][spawnX] != '@')
                     dialogueCounter = 0;
+
                 break;
             }
-
-
-            // Стрелка вниз
+                   // Стрелка вниз
             case 80: {
-                if (arr[spawnY + 1][spawnX] == ' ') {
+               /* moveBufferY = spawnY;
+                moveBufferX = spawnX;
+                spawnY +=1;
+                isMove = true;*/
+
+               if (arr[spawnY + 1][spawnX] == ' ') {
                     system("cls");
                     spawnY += 1;
                     arr[spawnY][spawnX] = 'O';
@@ -247,29 +291,12 @@ int main()
                 else if (arr[spawnY + 1][spawnX] == '@') {
                     system("cls");
 
-                    switch (spawnY + 1) {
-                    case 23: {
-                        buffer = 0;
-                        break;
-                    }
-                    case 26: {
-                        buffer = 1;
-                        break;
-                    }
-                    case 9: {
-                        buffer = 2;
-                        break;
-                    }
-                    case 19: {
-                        buffer = 3;
-                        break;
-                    }
-                    }
+                    NPCChoose(spawnY +1);
 
 
                     for (int i = 0; i < n; i++) {
                         for (int j = 0; j < m; j++) {
-                            if (i == textPlacement && j == 3 && dialogueCounter < 10) {
+                            if (i == textPlacementY && j == 3 && dialogueCounter < 10) {
                                 cout << NPCs[buffer].Dialogue[dialogueCounter];
                                 j += NPCs[buffer].Dialogue[dialogueCounter].length() - 1;
                                 dialogueCounter++;
@@ -285,10 +312,16 @@ int main()
                 }
                 if (arr[spawnY + 1][spawnX] != '@')
                     dialogueCounter = 0;
+
                 break;
             }
-            // Стрелка влево
+                   // Стрелка влево
             case 75: {
+                /*moveBufferX = spawnX;
+                moveBufferY = spawnY; 
+                spawnX =spawnX -  1;
+                isMove = true;*/
+
                 if (arr[spawnY][spawnX - 1] == ' ') {
                     system("cls");
                     spawnX--;
@@ -305,28 +338,11 @@ int main()
                 else if (arr[spawnY][spawnX-1] == '@') {
                     system("cls");
 
-                    switch (spawnX - 1) {
-                    case 23: {
-                        buffer = 0;
-                        break;
-                    }
-                    case 26: {
-                        buffer = 1;
-                        break;
-                    }
-                    case 9: {
-                        buffer = 2;
-                        break;
-                    }
-                    case 19: {
-                        buffer = 3;
-                        break;
-                    }
+                    NPCChoose(spawnX - 1);
 
-                    }
                     for (int i = 0; i < n; i++) {
                         for (int j = 0; j < m; j++) {
-                            if (i == textPlacement && j == 3 && dialogueCounter < 10) {
+                            if (i == textPlacementY && j == 3 && dialogueCounter < 10) {
                                 cout << NPCs[buffer].Dialogue[dialogueCounter];
                                 j += NPCs[buffer].Dialogue[dialogueCounter].length() - 1;
                                 dialogueCounter++;
@@ -343,80 +359,63 @@ int main()
                 if (arr[spawnY][spawnX-1] != '@')
                     dialogueCounter = 0;
                 break;
+
             }
-
-
-
-
-            // Стрелка вправо
+                   // Стрелка вправо
             case 77: {
-                //Передвижение по карте
-                if (arr[spawnY][spawnX + 1] == ' ') {
-                    system("cls");
-                    spawnX++;
-                    arr[spawnY][spawnX] = 'O';
-                    arr[spawnY][spawnX - 1] = ' ';
-                    for (int i = 0; i < n; i++) {
-                        mapPrint(arr[i], m);
-                    }
-                }
-                //Встреча с "коллизией" врага
-                else if (arr[spawnY][spawnX + 1] == '*') {
-                    system("cls");
-                    combat = true;
-                }
-                //Разговор с NPC
-                else if (arr[spawnY][spawnX+1] == '@') {
-                    system("cls");
-                    //Поиск нужного NPC для подгрузки диалогов по его X позиции(стоило бы сделать ещё и по Y) либо переработать по компактнее
-                    switch (spawnX + 1) {
-                    case 23: {
-                        buffer = 0;
-                        break;
-                    }
-                    case 26: {
-                        buffer = 1;
-                        break;
-                    }
-                    case 9: {
-                        buffer = 2;
-                        break;
-                    }
-                    case 19: {
-                        buffer = 3;
-                        break;
-                    }
-
-                    }
-                    // Вывод экрана с учётом диалога
-                    // Сначало просто цикл для собственно вывода
-                    for (int i = 0; i < n; i++) {
-                        for (int j = 0; j < m; j++) {
-                            
-                            // Тут если я на месте, где должен быть диалог, то собственно вывожу его и меня счётчик на длину строки для того
-                            // чтобы рамки не сломать
-                            if (i == textPlacement && j == 3 && dialogueCounter < 10) {
-                                cout << NPCs[buffer].Dialogue[dialogueCounter];
-                                j += NPCs[buffer].Dialogue[dialogueCounter].length() - 1;
-
-                                // Счётчик того, на каком я сейчас из пунктов диалого, временное решение, в будующем полностью переработаю с
-                                // надеждой на добавление механики диалого в вариантами ответа
-                                dialogueCounter++;
-                                if (dialogueCounter >= 10)
-                                    dialogueCounter = 0;
-                            }
-                            else{
-                                cout << arr[i][j];
-                            }
+                    //Передвижение по карте
+                    if (arr[spawnY][spawnX + 1] == ' ') {
+                        system("cls");
+                        spawnX++;
+                        arr[spawnY][spawnX] = 'O';
+                        arr[spawnY][spawnX - 1] = ' ';
+                        for (int i = 0; i < n; i++) {
+                            mapPrint(arr[i], m);
                         }
-                        cout << '\n';
                     }
-                }
-                if (arr[spawnY][spawnX+1] != '@')
-                    dialogueCounter = 0;
-                break;
+                    //Встреча с "коллизией" врага
+                    else if (arr[spawnY][spawnX + 1] == '*') {
+                        system("cls");
+                        combat = true;
+                    }
+                    //Разговор с NPC
+                    else if (arr[spawnY][spawnX + 1] == '@') {
+                        system("cls");
+                        //Поиск нужного NPC для подгрузки диалогов по его X позиции(стоило бы сделать ещё и по Y) либо переработать по компактнее
+                        NPCChoose(spawnX+1);
+
+
+                    //    // Вывод экрана с учётом диалога
+                    //    // Сначало просто цикл для собственно вывода
+                        for (int i = 0; i < n; i++) {
+                            for (int j = 0; j < m; j++) {
+
+                    //            // Тут если я на месте, где должен быть диалог, то собственно вывожу его и меня счётчик на длину строки для того
+                    //            // чтобы рамки не сломать
+                                if (i == textPlacementY && j == 3 && dialogueCounter < 10) {
+                                    cout << NPCs[buffer].Dialogue[dialogueCounter];
+                                    j += NPCs[buffer].Dialogue[dialogueCounter].length() - 1;
+
+                    //                // Счётчик того, на каком я сейчас из пунктов диалого, временное решение, в будующем полностью переработаю с
+                    //                // надеждой на добавление механики диалого в вариантами ответа
+                                    dialogueCounter++;
+                                    if (dialogueCounter >= 10)
+                                        dialogueCounter = 0;
+                                }
+                                else {
+                                    cout << arr[i][j];
+                                }
+                            }
+                            cout << '\n';
+                        }
+                    }
+                    if (arr[spawnY][spawnX+1] != '@')
+                        dialogueCounter = 0;
+                    break;
+                
             }
             }
+            
         }
         // Бой
         while (combat) {
@@ -425,10 +424,7 @@ int main()
             {
                 system("cls");
                 for (int i = 0; i < n; i++) {
-                    for (int j = 0; j < m; j++) {
-                        cout << combatArr[i][j];
-                    }
-                    cout << '\n';
+                    mapPrint(combatArr[i], m);
                 }
             }
             if (_kbhit()) {
@@ -439,10 +435,14 @@ int main()
                     system("cls");
                     for (int i = 0; i < n; i++) {
                         for (int j = 0; j < m; j++) {
-                            if (i == textPlacement && j == 3) {
+                            if (i == textPlacementY && j == 3) {
                                 Enemyes[0].health -= playerAtk;
-                                cout << "Enemy hit! Health left: " << Enemyes[0].health;
-                                j += 25;
+                                string buff = "Enemy hit! Health left: " + to_string(Enemyes[0].health);
+                                cout << buff;
+                                j += buff.length()-1;
+                            }
+                            else if (i == textPlacementY - 1) {
+                                cout << combatArr[i-1][j];
                             }
                             else {
                                 cout << combatArr[i][j];
@@ -462,7 +462,7 @@ int main()
                     system("cls");
                     for (int i = 0; i < n; i++) {
                         for (int j = 0; j < m; j++) {
-                            if (i == textPlacement && j == 3) {
+                            if (i == textPlacementY && j == 3) {
                                 playerHealth = playerHealth - (Enemyes[0].atk / 2);
                                 cout << "Youve bin hit!, your health is now " << playerHealth;
                                 j += 36;
@@ -500,7 +500,7 @@ int main()
 
                     
                     for (int i = 0, j = 122; i < statsAttack.length(); j++, i++)
-                        arr[textPlacement][j] = statsAttack[i];
+                        arr[textPlacementY][j] = statsAttack[i];
 
                     bufferForStats = statsHealth;
                     statsHealth = "Health: " + to_string(playerHealth);
@@ -508,7 +508,7 @@ int main()
                         statsHealth += " ";
 
                     for (int i = 0, j = 122; i < statsHealth.length(); j++, i++)
-                        arr[textPlacement - 1][j] = statsHealth[i];
+                        arr[textPlacementY - 1][j] = statsHealth[i];
                     
                     
                     for (int i = 0; i < n; i++) {
@@ -519,23 +519,32 @@ int main()
                 //Атака врага(пока только атака, потом будет ещё защита(?) с рандомным выбором по формуле нужного действия
                 //Нашёл ошибкц, пока не разберусь как переписать, починю костылём, всё равно боёвку пока не буду делать
                 if (combat && KOSTbILb) {
-                    Sleep(1700);
-                    system("cls");
-                    for (int i = 0; i < n; i++) {
-                        for (int j = 0; j < m; j++) {
-                            if (i == textPlacement && j == 3) {
-                                playerHealth -= Enemyes[0].atk;
-                                cout << "Youve bin hit!, your health is now " << playerHealth;
-                                j += 36;
+                    enemyActionChoose = rand() % 3 + 1 + to_string(playerHealth).length();
+                    if (enemyActionChoose < 6) {           //Проверка на действие врага
+                        Sleep(1700);
+                        system("cls");
+                        for (int i = 0; i < n; i++) {
+                            for (int j = 0; j < m; j++) {
+                                if (i == textPlacementY && j == 3) {
+                                    playerHealth -= Enemyes[0].atk;
+                                    string buff = "Youve bin hit!, your health is now " + to_string(playerHealth);
+                                    cout << buff;
+                                    j += buff.length()-1;
+                                }
+                                else {
+                                    cout << combatArr[i][j];
+                                }
                             }
-                            else {
-                                cout << combatArr[i][j];
-                            }
+                            cout << '\n';
                         }
-                        cout << '\n';
+                        
+                        KOSTbILb = false;
                     }
-                    KOSTbILb = false;
+                    else if (enemyActionChoose > 5) {
+                        KOSTbILb = false;
+                    }
                 }
+
             }
             round++;
         }
