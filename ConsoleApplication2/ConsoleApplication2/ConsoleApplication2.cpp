@@ -3,20 +3,23 @@
 #include <cstdlib>
 #include <conio.h>
 #include <windows.h>
+#include <ctffunc.h>
 
 using namespace std;
 
 struct NPC {
     string NPCName;
     string Dialogue[10];
+    string Answer[10];
     int posX, posY;
-    bool friendly;
+    bool questTaken;
+    bool questComplete;
 }NPCs[4];
 
 struct Enemy {
     string enemyName;
     int posX, posY;
-    int health, atk;
+    int health, atk, exp;
 }Enemyes[3];
 
 void mapPrint(char arr[], int m) {
@@ -25,6 +28,26 @@ void mapPrint(char arr[], int m) {
     }
     cout << '\n';
 }
+
+void simulateF11() {
+    INPUT input[2] = {};
+
+    input[0].type = INPUT_KEYBOARD;
+    input[0].ki.wVk = VK_F11;
+    input[0].ki.dwFlags = 0;
+
+    input[1].type = INPUT_KEYBOARD;
+    input[1].ki.wVk = VK_F11;
+    input[1].ki.dwFlags = KEYEVENTF_KEYUP;
+
+    SendInput(2, input, sizeof(INPUT));
+}
+
+
+void fillTextField(char arr[], string textField, int placementX) {
+    for (int i = 0, j = placementX; i < textField.length(); j++, i++)
+        arr[j] = textField[i];
+};
 
 void newCursorPosition(int posX, int posY) {
     HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -83,6 +106,22 @@ void printStat(string stat, string oldStat, int textPlacement) {
     printString(122, textPlacement, stat);
 }
 
+void dialogueClear(int y, int x) {
+    for (int i = x; i < 118; i++) {
+        newCursorPosition(i, y);
+        clearElement(i, y);
+        printChar(i, y, ' ');
+    }
+}
+
+void dialoguePrint(int y, int x, string strings) {
+    dialogueClear(y, x);
+    newCursorPosition(x, y);
+    printString(x, y, strings);
+};
+
+
+
 void playerMove(int spawnX, int spawnY, int bufferX, int bufferY) {
     newCursorPosition(spawnX, spawnY);
     clearElement(spawnX, spawnY);
@@ -93,6 +132,12 @@ void playerMove(int spawnX, int spawnY, int bufferX, int bufferY) {
     printChar(bufferX, bufferY, ' ');
 }
 
+void hideCursor() {
+    CONSOLE_CURSOR_INFO cursorInfo;
+    cursorInfo.dwSize = 100;
+    cursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+}
 
 int main()
 {
@@ -101,6 +146,7 @@ int main()
     Enemyes[0].posX = 22;
     Enemyes[0].health = 35;
     Enemyes[0].atk = 4;
+    Enemyes[0].exp = 10;
     Enemyes[0].enemyName = "Skeleton";
 
     // Ввожу NPC, их корды, диалоги +идея сделать враждебных NPC(?)(не самое главное)
@@ -116,6 +162,11 @@ int main()
     NPCs[0].Dialogue[7] = ".....";
     NPCs[0].Dialogue[8] = "Okay, im tired, just go away";
     NPCs[0].Dialogue[9] = "Man, KYS!!!!";
+
+    NPCs[0].Answer[0] = "Hello man!";
+
+    NPCs[0].questComplete = false;
+    NPCs[0].questTaken = false;
 
     NPCs[1].posY = 26;
     NPCs[1].posX = 100;
@@ -157,8 +208,10 @@ int main()
     NPCs[3].Dialogue[9] = "Man, KYS!!!!";
 
     int playerAtk = 10;
+    int playerExp = 0;
     int round = 1;
     int playerHealth = 100;
+    int playerCurHealth = 100;
     int playerАgility = 2;
     int spawnY = 23;
     int spawnX = 59;
@@ -167,7 +220,7 @@ int main()
     int bufferY;
     int counter = 0;
     int dialogueCounter = 0;
-    const int n = 45;
+    const int n = 44;
     const int m = 156;
     const int textPlacementY = 39;
     const int textPlacementX = 3;
@@ -176,11 +229,14 @@ int main()
     char arr[n][m];
     char combatArr[n][m];
     string statsAttack = "Attack: " + to_string(playerAtk);
-    string statsHealth = "Health: " + to_string(playerHealth);
-    string statsАgility = "Аgility: " + to_string(playerАgility);
+    string statsHealth = "Health: " + to_string(playerCurHealth)+ "/" + to_string(playerHealth);
+    string statsАgility = "Agility: " + to_string(playerАgility);
     string bufferForStats;
-    bool KOSTbILb = false;
+    bool EnemyAction = false;
 
+    simulateF11();
+    hideCursor();
+   
     //Настройка границ и карты
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -195,15 +251,11 @@ int main()
             }
         }
     }
+
     //Текстовые поля в интерфейсе игрока
-    for (int i = 0, j = 122; i < statsАgility.length(); j++, i++)
-        arr[textPlacementY + 1][j] = statsАgility[i];
-
-    for (int i = 0, j = 122; i < statsAttack.length(); j++, i++)
-        arr[textPlacementY][j] = statsAttack[i];
-
-    for (int i = 0, j = 122; i < statsHealth.length(); j++, i++)
-        arr[textPlacementY - 1][j] = statsHealth[i];
+    fillTextField(arr[textPlacementY+1], statsАgility, 122);
+    fillTextField(arr[textPlacementY], statsAttack, 122);
+    fillTextField(arr[textPlacementY-1], statsHealth, 122);
 
 
     //Настройка границ и поля битвы
@@ -213,7 +265,7 @@ int main()
                 combatArr[i][j] = '-';
             }
             else if (j == 0 || j == 119 || j == m - 1) {
-                arr[i][j] = '|';
+                combatArr[i][j] = '|';
             }
             else {
                 combatArr[i][j] = ' ';
@@ -236,12 +288,33 @@ int main()
         mapPrint(arr[i], m);
 
     }
+    
     newCursorPosition(spawnX, spawnY);//Player
     clearElement(spawnX, spawnY);
     printChar(spawnX, spawnY, 'O');
 
     while (game) {
-
+        if (playerExp == 100) {
+            if (_kbhit()) {
+                switch (_getch()) {
+                case 72: {
+                    playerAtk += 3;
+                    playerExp = 0;
+                    break;
+                }
+                case 75: {
+                    playerExp = 0;
+                    playerHealth += 10;
+                    break;
+                }
+                case 77: {
+                    playerExp = 0;
+                    playerАgility += 2;
+                    break;
+                }
+                }
+            }
+        }
         if (_kbhit()) {
             switch (_getch()) {
                 //Sleep(10);
@@ -252,7 +325,6 @@ int main()
                     bufferY = spawnY;
                     bufferX = spawnX;
                     spawnY--;
-
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
                 else if (arr[spawnY - 1][spawnX] == '*') {
@@ -262,19 +334,7 @@ int main()
                 else if (arr[spawnY - 1][spawnX] == '@') {
 
                     buffer = NPCChoose(spawnY - 1);
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
-                    newCursorPosition(textPlacementX, textPlacementY);
-                    printString(textPlacementX, textPlacementY, NPCs[buffer].Dialogue[0]);
-                }
-                if (arr[spawnY - 1][spawnX] != '@') {
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
-                    dialogueCounter = 0;
+                    
                 }
                 break;
             }
@@ -297,20 +357,11 @@ int main()
                 else if (arr[spawnY + 1][spawnX] == '@') {
 
                     buffer = NPCChoose(spawnY + 1);
-
-
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
-                    newCursorPosition(textPlacementX, textPlacementY);
-                    printString(textPlacementX, textPlacementY, NPCs[buffer].Dialogue[0]);
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[0].Dialogue[dialogueCounter]);
+                    dialogueCounter++;
                 }
                 if (arr[spawnY + 1][spawnX] != '@') {
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
+                    dialogueClear(textPlacementY, textPlacementX);
                     dialogueCounter = 0;
                 }
                 break;
@@ -341,10 +392,7 @@ int main()
                     printString(textPlacementX, textPlacementY, NPCs[buffer].Dialogue[0]);
                 }
                 if (arr[spawnY][spawnX - 1] != '@') {
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
+                    dialogueClear(textPlacementY, textPlacementX);
                     dialogueCounter = 0;
                 }
                 break;
@@ -383,10 +431,7 @@ int main()
 
                 }
                 if (arr[spawnY][spawnX + 1] != '@') {
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
+                    dialogueClear(textPlacementY, textPlacementX);
                     dialogueCounter = 0;
                 }
                 break;
@@ -425,7 +470,7 @@ int main()
                         }
                         cout << '\n';
                     }
-                    KOSTbILb = true;
+                    EnemyAction = true;
                     break;
                 }
                        //Защита игрока (!ПЕРЕРАБОТАТЬ!) ИДЕИ:
@@ -448,7 +493,7 @@ int main()
                         }
                         cout << '\n';
                     }
-                    KOSTbILb = true;
+                    EnemyAction = true;
                     break;
                 }
                 }
@@ -456,7 +501,7 @@ int main()
                 if (Enemyes[0].health <= 0) {
 
                     combat = false;             //Отключает цикл боя
-
+                    playerExp += Enemyes[0].exp;
                     arr[Enemyes[0].posY][Enemyes[0].posX] = ' ';  //Удаляет врага с карты и ставит на его место игрока
                     //spawnX = Enemyes[0].posX;
                     //spawnY = Enemyes[0].posY;
@@ -489,7 +534,7 @@ int main()
                 }
                 //Атака врага(пока только атака, потом будет ещё защита(?) с рандомным выбором по формуле нужного действия
                 //Нашёл ошибкц, пока не разберусь как переписать, починю костылём, всё равно боёвку пока не буду делать
-                if (combat && KOSTbILb) {
+                if (combat && EnemyAction) {
                     Sleep(1700);
                     system("cls");
                     for (int i = 0; i < n; i++) {
@@ -505,7 +550,7 @@ int main()
                         }
                         cout << '\n';
                     }
-                    KOSTbILb = false;
+                    EnemyAction = false;
                 }
             }
             round++;
