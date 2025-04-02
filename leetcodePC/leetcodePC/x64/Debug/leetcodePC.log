@@ -1,0 +1,7 @@
+﻿  leetcodePC.cpp
+E:\Reposit\Kursowaya\leetcodePC\leetcodePC\leetcodePC.cpp(9,34): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+E:\Reposit\Kursowaya\leetcodePC\leetcodePC\leetcodePC.cpp(42,41): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+E:\Reposit\Kursowaya\leetcodePC\leetcodePC\leetcodePC.cpp(67,34): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+E:\Reposit\Kursowaya\leetcodePC\leetcodePC\leetcodePC.cpp(72,45): warning C4805: !=: небезопасное смешение типа "int" и типа "bool" в операции
+E:\Reposit\Kursowaya\leetcodePC\leetcodePC\leetcodePC.cpp(97,1): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
+  leetcodePC.vcxproj -> E:\Reposit\Kursowaya\leetcodePC\x64\Debug\leetcodePC.exe
