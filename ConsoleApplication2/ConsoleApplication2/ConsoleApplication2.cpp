@@ -332,9 +332,12 @@ int main()
                     combat = true;
                 }
                 else if (arr[spawnY - 1][spawnX] == '@') {
-
-                    buffer = NPCChoose(spawnY - 1);
-                    
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
+                    dialogueCounter++;
+                }
+                if (arr[spawnY - 1][spawnX] != '@') {
+                    dialogueClear(textPlacementY, textPlacementX);
+                    dialogueCounter = 0;
                 }
                 break;
             }
@@ -357,7 +360,7 @@ int main()
                 else if (arr[spawnY + 1][spawnX] == '@') {
 
                     buffer = NPCChoose(spawnY + 1);
-                    dialoguePrint(textPlacementY, textPlacementX, NPCs[0].Dialogue[dialogueCounter]);
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer = NPCChoose(spawnY + 1)].Dialogue[dialogueCounter]);
                     dialogueCounter++;
                 }
                 if (arr[spawnY + 1][spawnX] != '@') {
