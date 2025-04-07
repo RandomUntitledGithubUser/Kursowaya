@@ -11,6 +11,7 @@ struct NPC {
     string NPCName;
     string Dialogue[10];
     string Answer[10];
+    int wrongAnsw[5];
     int posX, posY;
     bool questTaken;
     bool questComplete;
@@ -163,19 +164,25 @@ int main()
     // Ввожу NPC, их корды, диалоги +идея сделать враждебных NPC(?)(не самое главное)
     NPCs[0].posY = 23;
     NPCs[0].posX = 61;
-    NPCs[0].Dialogue[0] = "Hello there";
-    NPCs[0].Dialogue[1] = "Do you want something?";
-    NPCs[0].Dialogue[2] = "Hey, are you there?";
-    NPCs[0].Dialogue[3] = "Did you here me???";
-    NPCs[0].Dialogue[4] = "Bro? you okay?";
-    NPCs[0].Dialogue[5] = "Why you.. Just stands.. here...";
-    NPCs[0].Dialogue[6] = "And staring at me....";
-    NPCs[0].Dialogue[7] = ".....";
-    NPCs[0].Dialogue[8] = "Okay, im tired, just go away";
-    NPCs[0].Dialogue[9] = "Man, KYS!!!!";
+    NPCs[0].Dialogue[0] = "0 Hello there! Did you have some free time?";
+    NPCs[0].Dialogue[1] = "1 Oh well,";
+    NPCs[0].Dialogue[2] = "2 Thats great! There some skeletons that really borred me. Can you help with them?";
+    NPCs[0].Dialogue[3] = "3";
+    NPCs[0].Dialogue[4] = "4 Oh welp ";
+    NPCs[0].Dialogue[5] = "5 I'll wait you right here when you make it. See you later!";
+    NPCs[0].Dialogue[6] = "6 ";
+    NPCs[0].Dialogue[7] = "7 What a nice day!";
+    NPCs[0].Dialogue[8] = "8 It seems you didnt comlete your quest. Come back when you make it!";
+    NPCs[0].Dialogue[9] = "9 You did that! I always knew you will! Thats your price!";
 
-    NPCs[0].Answer[0] = "Hello man!";
-    NPCs[0].Answer[1] = "Nuhh, don't interested!";
+    NPCs[0].Answer[1] = "1 Hello!";
+    NPCs[0].Answer[2] = "2 Yes, of courese, thats what im looking for!";
+    NPCs[0].Answer[3] = "3 Nahh, don't interested";
+    NPCs[0].Answer[4] = "4";
+    NPCs[0].Answer[5] = "5 Well, I think i changed my mind. Maybe later";
+    NPCs[0].Answer[6] = "6";
+    NPCs[0].Answer[7] = "7 See you!";
+    NPCs[0].Answer[0] = "0 Hello!";
 
     NPCs[0].questComplete = false;
     NPCs[0].questTaken = false;
@@ -234,12 +241,14 @@ int main()
     int bufferY;
     int counter = 0;
     int dialogueCounter = 0;
+    int answerCounter = 0;
     const int n = 44;
     const int m = 156;
     const int textPlacementY = 39;
     const int textPlacementX = 3;
     bool combat = false;
     bool game = true;
+    bool dialogue = false;
     char arr[n][m];
     char combatArr[n][m];
     string statsAttack = "Attack: " + to_string(playerAtk);
@@ -346,12 +355,8 @@ int main()
                     combat = true;
                 }
                 else if (arr[spawnY - 1][spawnX] == '@') {
-                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
-                    dialogueCounter++;
-                }
-                if (arr[spawnY - 1][spawnX] != '@') {
-                    dialogueClear(textPlacementY, textPlacementX);
-                    dialogueCounter = 0;
+                    dialogue = true;
+                  
                 }
                 break;
             }
@@ -443,6 +448,42 @@ int main()
                 }
                 break;
             }
+            }
+        }
+        //Диалог
+        while (dialogue) {
+            if (dialogueCounter == 0) {
+                dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
+                counter++;
+                dialogueCounter++;
+            }
+            if (_kbhit()) {
+                switch (_getch()) {
+                case 75: {
+                    answerCounter += pow(2, counter-1);
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[dialogueCounter]);
+                    Sleep(1700);
+                    dialogueCounter += pow(2, counter-1);;
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
+                    Sleep(1700);
+                    counter++;
+                    break;
+                }
+                case 77: {
+                    answerCounter += pow(2, counter);;
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[dialogueCounter]);
+                    Sleep(1700);
+                    dialogueCounter += pow(2, counter);;
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
+                    Sleep(1700);
+                    counter++;
+                    break;
+                }
+                case 80: {
+                    dialogue = false;
+                    break;
+                }
+                }
             }
         }
         // Бой
