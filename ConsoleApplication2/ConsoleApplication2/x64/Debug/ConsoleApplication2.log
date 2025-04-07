@@ -1,3 +1,4 @@
 ﻿  ConsoleApplication2.cpp
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(283,9): error C3861: mapPrint: идентификатор не найден
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(513,25): error C3861: mapPrint: идентификатор не найден
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(493,51): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(92): warning C4715: NPCChoose: значение возвращается не при всех путях выполнения
+  ConsoleApplication2.vcxproj -> E:\Reposit\Kursowaya\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe

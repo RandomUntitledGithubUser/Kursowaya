@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <conio.h>
 #include <windows.h>
-#include <ctffunc.h>
+#include "func.h"
 
 using namespace std;
 
@@ -19,7 +19,8 @@ struct NPC {
 struct Enemy {
     string enemyName;
     int posX, posY;
-    int health, atk, exp;
+    int health, curHealth , atk, exp;
+    int HPposX, HPposY;
 }Enemyes[3];
 
 void mapPrint(char arr[], int m) {
@@ -29,7 +30,7 @@ void mapPrint(char arr[], int m) {
     cout << '\n';
 }
 
-void simulateF11() {
+void virtualF11Press() {
     INPUT input[2] = {};
 
     input[0].type = INPUT_KEYBOARD;
@@ -145,9 +146,19 @@ int main()
     Enemyes[0].posY = 22;
     Enemyes[0].posX = 22;
     Enemyes[0].health = 35;
+    Enemyes[0].curHealth = 35;
     Enemyes[0].atk = 4;
     Enemyes[0].exp = 10;
+    Enemyes[0].HPposX = 50;
+    Enemyes[0].HPposY = 14;
     Enemyes[0].enemyName = "Skeleton";
+
+    Enemyes[1].posY = 10;
+    Enemyes[1].posX = 100;
+    Enemyes[1].health = 50;
+    Enemyes[1].atk = 8;
+    Enemyes[1].exp = 25;
+    Enemyes[1].enemyName = "Zombie";
 
     // Ввожу NPC, их корды, диалоги +идея сделать враждебных NPC(?)(не самое главное)
     NPCs[0].posY = 23;
@@ -164,6 +175,7 @@ int main()
     NPCs[0].Dialogue[9] = "Man, KYS!!!!";
 
     NPCs[0].Answer[0] = "Hello man!";
+    NPCs[0].Answer[1] = "Nuhh, don't interested!";
 
     NPCs[0].questComplete = false;
     NPCs[0].questTaken = false;
@@ -209,12 +221,14 @@ int main()
 
     int playerAtk = 10;
     int playerExp = 0;
-    int round = 1;
     int playerHealth = 100;
     int playerCurHealth = 100;
     int playerАgility = 2;
     int spawnY = 23;
     int spawnX = 59;
+    int bonusАgility = 0;
+
+    int round = 0;
     int buffer = 0;
     int bufferX;
     int bufferY;
@@ -234,7 +248,7 @@ int main()
     string bufferForStats;
     bool EnemyAction = false;
 
-    simulateF11();
+    virtualF11Press();
     hideCursor();
    
     //Настройка границ и карты
@@ -386,13 +400,8 @@ int main()
                     //system("cls");
 
                     buffer = NPCChoose(spawnY);
-
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
-                    newCursorPosition(textPlacementX, textPlacementY);
-                    printString(textPlacementX, textPlacementY, NPCs[buffer].Dialogue[0]);
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer = NPCChoose(spawnY)].Dialogue[dialogueCounter]);
+                    dialogueCounter++;
                 }
                 if (arr[spawnY][spawnX - 1] != '@') {
                     dialogueClear(textPlacementY, textPlacementX);
@@ -424,13 +433,8 @@ int main()
                     //Поиск нужного NPC для подгрузки диалогов по его X позиции(стоило бы сделать ещё и по Y) либо переработать по компактнее
                     buffer = NPCChoose(spawnY);
                     // Вывод диалога
-
-                    for (int i = 0; i < (NPCs[buffer].Dialogue[0]).length(); i++) {
-                        newCursorPosition(textPlacementX + i, textPlacementY);
-                        clearElement(textPlacementX + i, textPlacementY);
-                    }
-                    newCursorPosition(textPlacementX, textPlacementY);
-                    printString(textPlacementX, textPlacementY, NPCs[buffer].Dialogue[0]);
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer = NPCChoose(spawnY)].Dialogue[dialogueCounter]);
+                    dialogueCounter++;
 
                 }
                 if (arr[spawnY][spawnX + 1] != '@') {
@@ -444,8 +448,9 @@ int main()
         // Бой
         while (combat) {
             //Первый вывод экрана боя
-            if (round == 1)
+            if (round == 0)
             {
+                round++;
                 system("cls");
                 for (int i = 0; i < n; i++) {
                     for (int j = 0; j < m; j++) {
@@ -453,26 +458,26 @@ int main()
                     }
                     cout << '\n';
                 }
+                dialoguePrint(2, 3, "round "  + to_string(round));
+
+                printStat(statsHealth, "Health: " + to_string(playerCurHealth) + "/" + to_string(playerHealth), textPlacementY - 1);
+
+                //Attack
+                printStat(statsAttack, "Attack: " + to_string(playerAtk), textPlacementY);
+
+                //Аgility
+                printStat(statsАgility, "Agility: " + to_string(playerАgility), textPlacementY + 1);
+
+                dialoguePrint(Enemyes[0].HPposY, Enemyes[0].HPposX, to_string(Enemyes[0].curHealth) + "/" + to_string(Enemyes[0].health));
             }
             if (_kbhit()) {
                 switch (_getch()) {
                     //Атака игрока
                     //Есть идея о шансе на успешную атаку, либо механика критов, пока не решил
                 case 75: {
-                    system("cls");
-                    for (int i = 0; i < n; i++) {
-                        for (int j = 0; j < m; j++) {
-                            if (i == textPlacementY && j == 3) {
-                                Enemyes[0].health -= playerAtk;
-                                cout << "Enemy hit! Health left: " << Enemyes[0].health;
-                                j += 25;
-                            }
-                            else {
-                                cout << combatArr[i][j];
-                            }
-                        }
-                        cout << '\n';
-                    }
+                    Enemyes[0].curHealth -= playerAtk;
+                    dialoguePrint(Enemyes[0].HPposY, Enemyes[0].HPposX, to_string(Enemyes[0].curHealth) + "/" + to_string(Enemyes[0].health));
+                    dialoguePrint(textPlacementY, textPlacementX, "Enemy has been succesfuly hit!");
                     EnemyAction = true;
                     break;
                 }
@@ -482,26 +487,29 @@ int main()
                        //2.Стата "Сила", которая будет давать поглощение %входящего урона(новый показатель брони),
                        //тогда защита увеличит плоско(либо процентно(?)) показатель брони до следующего хода
                 case 77: {
-                    system("cls");
-                    for (int i = 0; i < n; i++) {
-                        for (int j = 0; j < m; j++) {
-                            if (i == textPlacementY && j == 3) {
-                                playerHealth = playerHealth - (Enemyes[0].atk / 2);
-                                cout << "Youve bin hit!, your health is now " << playerHealth;
-                                j += 36;
-                            }
-                            else {
-                                cout << combatArr[i][j];
-                            }
-                        }
-                        cout << '\n';
-                    }
+                    
+                    buffer = (2 * playerАgility) / 3;
+                    bonusАgility = buffer;
+                    buffer = (playerHealth * .05) + (playerАgility * .02 * playerHealth);
+                    playerCurHealth += buffer;
+
+                    if (playerCurHealth > playerHealth)
+                        playerCurHealth = playerHealth;
+
+                    printStat(statsАgility, "Agility: " +to_string(playerАgility + bonusАgility), textPlacementY + 1);
+                    printStat(statsHealth, "Health: " + to_string(playerCurHealth) + "/" + to_string(playerHealth), textPlacementY - 1);
+                    dialoguePrint(textPlacementY, textPlacementX, "Youve healed " + to_string (buffer) + "HP and gain " + to_string(bonusАgility)+" bonus agility for 1 round");
+                    Sleep(1700);
+                    dialoguePrint(textPlacementY, textPlacementX, "Now you feel determined and ready for fight!");
+                    Sleep(1700);
+
                     EnemyAction = true;
+                    buffer = 0;
                     break;
                 }
                 }
                 //Победа в битве
-                if (Enemyes[0].health <= 0) {
+                if (Enemyes[0].curHealth <= 0) {
 
                     combat = false;             //Отключает цикл боя
                     playerExp += Enemyes[0].exp;
@@ -510,7 +518,7 @@ int main()
                     //spawnY = Enemyes[0].posY;
                     //arr[spawnY][spawnX] = 'O';
 
-                    round = 1;                  //Сбрасывает счётчик раундов +небольшая задержка перед возвращением
+                    round = 0;                  //Сбрасывает счётчик раундов +небольшая задержка перед возвращением
                     Sleep(1700);
                     system("cls");
 
@@ -526,7 +534,7 @@ int main()
                     printChar(spawnX, spawnY, 'O');
 
                     //Health
-                    printStat(statsHealth, "Health: " + to_string(playerHealth), textPlacementY - 1);
+                    printStat(statsHealth, "Health: " + to_string(playerCurHealth)+"/"+ to_string(playerHealth), textPlacementY - 1);
 
                     //Attack
                     printStat(statsAttack, "Attack: " + to_string(playerAtk), textPlacementY);
@@ -535,32 +543,34 @@ int main()
                     printStat(statsАgility, "Agility: " + to_string(playerАgility), textPlacementY + 1);
                     break;
                 }
+
                 //Атака врага(пока только атака, потом будет ещё защита(?) с рандомным выбором по формуле нужного действия
                 //Нашёл ошибкц, пока не разберусь как переписать, починю костылём, всё равно боёвку пока не буду делать
                 if (combat && EnemyAction) {
-                    Sleep(1700);
-                    system("cls");
-                    for (int i = 0; i < n; i++) {
-                        for (int j = 0; j < m; j++) {
-                            if (i == textPlacementY && j == 3) {
-                                playerHealth -= Enemyes[0].atk;
-                                cout << "Youve bin hit!, your health is now " << playerHealth;
-                                j += 36;
-                            }
-                            else {
-                                cout << combatArr[i][j];
-                            }
-                        }
-                        cout << '\n';
+                    if ((playerАgility+bonusАgility)*2 <= Enemyes[0].atk) {
+                        Sleep(1700);
+                        playerCurHealth -= Enemyes[0].atk;
+                        dialoguePrint(Enemyes[0].HPposY, Enemyes[0].HPposX, to_string(Enemyes[0].curHealth) + "/" + to_string(Enemyes[0].health));
+                        dialoguePrint(textPlacementY, textPlacementX, "Youve bin hit!");
+                        printStat(statsHealth, "Health: " + to_string(playerCurHealth) + "/" + to_string(playerHealth), textPlacementY - 1);
                     }
+                    else {
+                        Sleep(1700);
+                        dialoguePrint(textPlacementY, textPlacementX, "Enemie miss!");
+                    }
+                    
+                    bonusАgility = 0;
+                    printStat(statsАgility, "Agility: " + to_string(playerАgility), textPlacementY + 1);
                     EnemyAction = false;
+                    round++;
+                    dialoguePrint(2, 3, "round " + to_string(round));
                 }
             }
-            round++;
+            
         }
     }
     system("cls");
-    cout << "Hello World!";
+    cout << "I dont really think you can somehow get there...";
 }
 
 

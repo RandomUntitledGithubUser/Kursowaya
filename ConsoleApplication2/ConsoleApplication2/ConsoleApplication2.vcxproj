@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication2.cpp" />
+    <ClCompile Include="func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="func.h" />
