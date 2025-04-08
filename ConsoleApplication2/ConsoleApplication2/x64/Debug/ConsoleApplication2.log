@@ -1,8 +1,8 @@
 ﻿  ConsoleApplication2.cpp
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(463,41): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(466,43): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(473,41): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(476,43): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(534,51): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(93,1): warning C4715: NPCChoose: значение возвращается не при всех путях выполнения
-  ConsoleApplication2.vcxproj -> C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(463,41): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(466,43): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(473,41): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(476,43): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(534,51): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(93): warning C4715: NPCChoose: значение возвращается не при всех путях выполнения
+  ConsoleApplication2.vcxproj -> E:\Reposit\Kursowaya\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe

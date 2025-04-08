@@ -11,7 +11,10 @@ struct NPC {
     string NPCName;
     string Dialogue[10];
     string Answer[10];
-    int wrongAnsw[5];
+    int wrongAnsw[3];
+    int questLineNum;
+    int idleLineNum;
+    int questCompleteLineNum;
     int posX, posY;
     bool questTaken;
     bool questComplete;
@@ -168,20 +171,21 @@ int main()
     NPCs[0].Dialogue[1] = "1 Oh well,";
     NPCs[0].Dialogue[2] = "2 Thats great! There some skeletons that really borred me. Can you help with them?";
     NPCs[0].Dialogue[3] = "3";
-    NPCs[0].Dialogue[4] = "4 Oh welp ";
-    NPCs[0].Dialogue[5] = "5 I'll wait you right here when you make it. See you later!";
-    NPCs[0].Dialogue[6] = "6 ";
+    NPCs[0].Dialogue[4] = "4  I'll wait you right here when you make it. See you later! ";
+    NPCs[0].Dialogue[5] = "5 oh welp";
+    NPCs[0].Dialogue[6] = "6 Oh welp";
     NPCs[0].Dialogue[7] = "7 What a nice day!";
     NPCs[0].Dialogue[8] = "8 It seems you didnt comlete your quest. Come back when you make it!";
     NPCs[0].Dialogue[9] = "9 You did that! I always knew you will! Thats your price!";
+    NPCs[0].questLineNum = 4;
 
-    NPCs[0].Answer[1] = "1 Hello!";
-    NPCs[0].Answer[2] = "2 Yes, of courese, thats what im looking for!";
-    NPCs[0].Answer[3] = "3 Nahh, don't interested";
+    NPCs[0].Answer[1] = "1 Hello! Yes, of courese, thats what im looking for!";
+    NPCs[0].Answer[2] = "2 Nahh, don't interested";
+    NPCs[0].Answer[3] = "3 Yes, i can";
     NPCs[0].Answer[4] = "4";
-    NPCs[0].Answer[5] = "5 Well, I think i changed my mind. Maybe later";
-    NPCs[0].Answer[6] = "6";
-    NPCs[0].Answer[7] = "7 See you!";
+    NPCs[0].Answer[5] = "5 See you";
+    NPCs[0].Answer[6] = "6 Well, I think i changed my mind. Maybe later";
+    NPCs[0].Answer[7] = "7 Well, I think i changed my mind. Maybe later";
     NPCs[0].Answer[0] = "0 Hello!";
 
     NPCs[0].questComplete = false;
@@ -452,6 +456,12 @@ int main()
         }
         //Диалог
         while (dialogue) {
+            
+
+            if (dialogueCounter == NPCs[NPCChoose(spawnY - 1)].questLineNum) {
+                dialogue = false;
+            }
+
             if (dialogueCounter == 0) {
                 dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
                 counter++;
@@ -461,7 +471,7 @@ int main()
                 switch (_getch()) {
                 case 75: {
                     answerCounter += pow(2, counter-1);
-                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[dialogueCounter]);
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[answerCounter]);
                     Sleep(1700);
                     dialogueCounter += pow(2, counter-1);;
                     dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
@@ -471,7 +481,7 @@ int main()
                 }
                 case 77: {
                     answerCounter += pow(2, counter);;
-                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[dialogueCounter]);
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[answerCounter]);
                     Sleep(1700);
                     dialogueCounter += pow(2, counter);;
                     dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
@@ -485,6 +495,11 @@ int main()
                 }
                 }
             }
+            if (NPCs[NPCChoose(spawnY - 1)].questLineNum == dialogueCounter) {
+                dialogue = false;
+                dialogueCounter = NPCs[NPCChoose(spawnY - 1)].idleLineNum;
+            }
+            
         }
         // Бой
         while (combat) {
