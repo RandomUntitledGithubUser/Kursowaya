@@ -7,17 +7,26 @@
 
 using namespace std;
 
+struct Quest {
+    string questName;
+    int questCounter;
+    bool questTaken;
+    bool questComplete;
+    int questLineNum;
+    int idleLineNum;
+    int questCompleteLineNum;
+};
+
+struct Plyare {
+
+};
+
 struct NPC {
     string NPCName;
     string Dialogue[10];
     string Answer[10];
     int wrongAnsw[3];
-    int questLineNum;
-    int idleLineNum;
-    int questCompleteLineNum;
     int posX, posY;
-    bool questTaken;
-    bool questComplete;
 }NPCs[4];
 
 struct Enemy {
@@ -177,7 +186,7 @@ int main()
     NPCs[0].Dialogue[7] = "7 What a nice day!";
     NPCs[0].Dialogue[8] = "8 It seems you didnt comlete your quest. Come back when you make it!";
     NPCs[0].Dialogue[9] = "9 You did that! I always knew you will! Thats your price!";
-    NPCs[0].questLineNum = 4;
+   // NPCs[0].questLineNum = 4;
 
     NPCs[0].Answer[1] = "1 Hello! Yes, of courese, thats what im looking for!";
     NPCs[0].Answer[2] = "2 Nahh, don't interested";
@@ -188,8 +197,8 @@ int main()
     NPCs[0].Answer[7] = "7 Well, I think i changed my mind. Maybe later";
     NPCs[0].Answer[0] = "0 Hello!";
 
-    NPCs[0].questComplete = false;
-    NPCs[0].questTaken = false;
+    //NPCs[0].questComplete = false;
+    //NPCs[0].questTaken = false;
 
     NPCs[1].posY = 26;
     NPCs[1].posX = 100;
@@ -238,6 +247,7 @@ int main()
     int spawnY = 23;
     int spawnX = 59;
     int bonusАgility = 0;
+    
 
     int round = 0;
     int buffer = 0;
@@ -246,6 +256,7 @@ int main()
     int counter = 0;
     int dialogueCounter = 0;
     int answerCounter = 0;
+    int questCompletedCounter = 0;
     const int n = 44;
     const int m = 156;
     const int textPlacementY = 39;
@@ -458,9 +469,9 @@ int main()
         while (dialogue) {
             
 
-            if (dialogueCounter == NPCs[NPCChoose(spawnY - 1)].questLineNum) {
+            /*if (dialogueCounter == NPCs[NPCChoose(spawnY - 1)].questLineNum) {
                 dialogue = false;
-            }
+            }*/
 
             if (dialogueCounter == 0) {
                 dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
@@ -495,10 +506,10 @@ int main()
                 }
                 }
             }
-            if (NPCs[NPCChoose(spawnY - 1)].questLineNum == dialogueCounter) {
+            /*if (NPCs[NPCChoose(spawnY - 1)].questLineNum == dialogueCounter) {
                 dialogue = false;
                 dialogueCounter = NPCs[NPCChoose(spawnY - 1)].idleLineNum;
-            }
+            }*/
             
         }
         // Бой
