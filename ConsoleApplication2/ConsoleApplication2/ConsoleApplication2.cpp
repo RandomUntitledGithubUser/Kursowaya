@@ -9,17 +9,24 @@ using namespace std;
 
 struct Quest {
     string questName;
-    int questCounter;
-    bool questTaken;
+    int questCounter = 0;
+    int questReq;
+    int questID;
+    string questTarget;
+    string questText;
     bool questComplete;
     int questLineNum;
     int idleLineNum;
+    int questPreCompleteLineNum;
     int questCompleteLineNum;
+    int expReward;
 };
 
 struct Player {
+    int questsCompleted;
     int playerAtk;
     int playerExp;
+    int playerMaxExp;
     int playerHealth;
     int playerCurHealth;
     int playerАgility;
@@ -34,133 +41,15 @@ struct NPC {
     string Answer[10];
     int wrongAnsw[3];
     int posX, posY;
+    Quest quest;
 }NPCs[4];
 
 struct Enemy {
     string enemyName;
     int posX, posY;
-    int health, curHealth , atk, exp;
+    int health, curHealth, atk, exp;
     int HPposX, HPposY;
 }Enemyes[3];
-
-//void mapPrint(char *arr, int m, int n) {
-//    for (int i = 0; i < n; i++) {
-//        for (int j = 0; j < m; j++) {
-//            cout << arr[i*m+j];
-//        }
-//        cout << '\n';
-//    }
-//}
-//
-//void virtualF11Press() {
-//    INPUT input[2] = {};
-//
-//    input[0].type = INPUT_KEYBOARD;
-//    input[0].ki.wVk = VK_F11;
-//    input[0].ki.dwFlags = 0;
-//
-//    input[1].type = INPUT_KEYBOARD;
-//    input[1].ki.wVk = VK_F11;
-//    input[1].ki.dwFlags = KEYEVENTF_KEYUP;
-//
-//    SendInput(2, input, sizeof(INPUT));
-//}
-//
-//
-//void fillTextField(char arr[], string textField, int placementX) {
-//    for (int i = 0, j = placementX; i < textField.length(); j++, i++)
-//        arr[j] = textField[i];
-//};
-//
-//void newCursorPosition(int posX, int posY) {
-//    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-//    COORD position = {
-//        static_cast<SHORT>(posX),
-//        static_cast<SHORT>(posY)
-//    };
-//    SetConsoleCursorPosition(console, position);
-//}
-//
-//void printChar(int posX, int posY, char object) {
-//    newCursorPosition(posX, posY);
-//    cout << object;
-//}
-//
-//void printString(int posX, int posY, string text) {
-//    newCursorPosition(posX, posY);
-//    cout << text;
-//}
-//
-//void clearElement(int posX, int posY) {
-//    printChar(posX, posY, ' ');
-//}
-//
-//int NPCChoose(int pos) {
-//    switch (pos) {
-//    case 23: {
-//        return 0;
-//    }
-//    case 26: {
-//        return 1;
-//    }
-//    case 9: {
-//        return 2;
-//    }
-//    case 19: {
-//        return 3;
-//    }
-//
-//    }
-//}
-//
-//void printStat(string stat, string oldStat, int textPlacement) {
-//    string buffer = stat;
-//    stat = oldStat;
-//
-//    if (buffer.length() > stat.length())
-//        stat += " ";
-//
-//    for (int i = 0; i < stat.length(); i++) {
-//        newCursorPosition(122 + i, textPlacement);
-//        clearElement(122 + i, textPlacement);
-//    }
-//
-//    newCursorPosition(122, textPlacement);
-//    printString(122, textPlacement, stat);
-//}
-//
-//void dialogueClear(int y, int x) {
-//    for (int i = x; i < 118; i++) {
-//        newCursorPosition(i, y);
-//        clearElement(i, y);
-//        printChar(i, y, ' ');
-//    }
-//}
-//
-//void dialoguePrint(int y, int x, string strings) {
-//    dialogueClear(y, x);
-//    newCursorPosition(x, y);
-//    printString(x, y, strings);
-//};
-//
-//
-//
-//void playerMove(int spawnX, int spawnY, int bufferX, int bufferY) {
-//    newCursorPosition(spawnX, spawnY);
-//    clearElement(spawnX, spawnY);
-//    printChar(spawnX, spawnY, 'O');
-//
-//    newCursorPosition(bufferX, bufferY);
-//    clearElement(bufferX, bufferY);
-//    printChar(bufferX, bufferY, ' ');
-//}
-//
-//void hideCursor() {
-//    CONSOLE_CURSOR_INFO cursorInfo;
-//    cursorInfo.dwSize = 100;
-//    cursorInfo.bVisible = FALSE;
-//    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
-//}
 
 int main()
 {
@@ -178,24 +67,48 @@ int main()
     Enemyes[1].posY = 10;
     Enemyes[1].posX = 100;
     Enemyes[1].health = 50;
+    Enemyes[1].curHealth = 50;
     Enemyes[1].atk = 8;
-    Enemyes[1].exp = 25;
+    Enemyes[1].exp = 35;
+    Enemyes[1].HPposX = 50;
+    Enemyes[1].HPposY = 14;
     Enemyes[1].enemyName = "Zombie";
+
+    Enemyes[2].posY = 11;
+    Enemyes[2].posX = 11;
+    Enemyes[2].health = 100;
+    Enemyes[2].curHealth = 100;
+    Enemyes[2].atk = 14;
+    Enemyes[2].exp = 250;
+    Enemyes[2].HPposX = 50;
+    Enemyes[2].HPposY = 14;
+    Enemyes[2].enemyName = "Mage";
 
     // Ввожу NPC, их корды, диалоги +идея сделать враждебных NPC(?)(не самое главное)
     NPCs[0].posY = 23;
     NPCs[0].posX = 61;
-    NPCs[0].Dialogue[0] = "0 Hello there! Did you have some free time?";
-    NPCs[0].Dialogue[1] = "1 Oh well,";
-    NPCs[0].Dialogue[2] = "2 Thats great! There some skeletons that really borred me. Can you help with them?";
-    NPCs[0].Dialogue[3] = "3";
-    NPCs[0].Dialogue[4] = "4  I'll wait you right here when you make it. See you later! ";
-    NPCs[0].Dialogue[5] = "5 oh welp";
-    NPCs[0].Dialogue[6] = "6 Oh welp";
-    NPCs[0].Dialogue[7] = "7 What a nice day!";
-    NPCs[0].Dialogue[8] = "8 It seems you didnt comlete your quest. Come back when you make it!";
-    NPCs[0].Dialogue[9] = "9 You did that! I always knew you will! Thats your price!";
-   // NPCs[0].questLineNum = 4;
+    NPCs[0].Dialogue[0] = "0 Hello there! I've heard about you.";
+    NPCs[0].Dialogue[1] = "1 Your'e that brave hero who's quest to free our lands from that evil necromacer?";
+    NPCs[0].Dialogue[2] = "2 Thats great! But you need to prove your skills first?. I can help with that!";
+    NPCs[0].Dialogue[3] = "3 Theres some skeletons who ruining my crops, and you see, im too old for the fight";
+    NPCs[0].Dialogue[4] = "4 So, Youre quest will be to kill those 3 skeletons. Seems not very hard to you, am i right?";
+    NPCs[0].Dialogue[5] = "5 Ill be wait for you right here";
+    NPCs[0].Dialogue[6] = "6 And, of course, I will grant you some reward for that!";
+    NPCs[0].Dialogue[7] = "7 Hello there! Come back when complete my quest, my man!";
+    NPCs[0].Dialogue[8] = "8 Hey, youv'e did it! Really nice, there's youre reward, friend!";
+    NPCs[0].Dialogue[9] = "9 Hello there!";
+    // NPCs[0].questLineNum = 4;
+    NPCs[0].quest.questTarget = "Skeleton";
+    NPCs[0].quest.questLineNum = 6;
+    NPCs[0].quest.idleLineNum = 7;
+    NPCs[0].quest.questCompleteLineNum = 9;
+    NPCs[0].quest.questPreCompleteLineNum = 8;
+    NPCs[0].quest.expReward = 175;
+    NPCs[0].quest.questReq = 1;
+    NPCs[0].quest.questID = 0;
+    NPCs[0].quest.questText = "Kill 3 skeletons: ";
+    NPCs[0].quest.questComplete = false;
+
 
     NPCs[0].Answer[1] = "1 Hello! Yes, of courese, thats what im looking for!";
     NPCs[0].Answer[2] = "2 Nahh, don't interested";
@@ -211,62 +124,102 @@ int main()
 
     NPCs[1].posY = 26;
     NPCs[1].posX = 100;
-    NPCs[1].Dialogue[0] = "H";
+    NPCs[1].Dialogue[0] = "NPC 1; pos:(26,100)";
     NPCs[1].Dialogue[1] = "Do you want something?";
     NPCs[1].Dialogue[2] = "Hey, are you there?";
     NPCs[1].Dialogue[3] = "Did you here me???";
     NPCs[1].Dialogue[4] = "Bro? you okay?";
     NPCs[1].Dialogue[5] = "Why you.. Just stands.. here...";
-    NPCs[1].Dialogue[6] = "And staring at me....";
-    NPCs[1].Dialogue[7] = ".....";
-    NPCs[1].Dialogue[8] = "Okay, im tired, just go away";
-    NPCs[1].Dialogue[9] = "Man, KYS!!!!";
+    NPCs[1].Dialogue[6] = "6 And staring at me....";
+    NPCs[1].Dialogue[7] = "fffffffffffffffff";
+    NPCs[1].Dialogue[8] = "8 Okay, im tired, just go away";
+    NPCs[1].Dialogue[9] = "9 Man, KYS!!!!";
+
+    NPCs[1].quest.questTarget = "Zombie";
+    NPCs[1].quest.questLineNum = 6;
+    NPCs[1].quest.idleLineNum = 7;
+    NPCs[1].quest.questCompleteLineNum = 9;
+    NPCs[1].quest.questPreCompleteLineNum = 8;
+    NPCs[1].quest.expReward = 325;
+    NPCs[1].quest.questReq = 6;
+    NPCs[1].quest.questID = 1;
+    NPCs[1].quest.questText = "Kill 6 zombies: ";
+    NPCs[1].quest.questComplete = false;
+
 
     NPCs[2].posY = 9;
     NPCs[2].posX = 110;
-    NPCs[2].Dialogue[0] = "ello there";
+    NPCs[2].Dialogue[0] = "NPC 2; pos:(9 ,110)";
     NPCs[2].Dialogue[1] = "Do you want something?";
     NPCs[2].Dialogue[2] = "Hey, are you there?";
     NPCs[2].Dialogue[3] = "Did you here me???";
     NPCs[2].Dialogue[4] = "Bro? you okay?";
     NPCs[2].Dialogue[5] = "Why you.. Just stands.. here...";
-    NPCs[2].Dialogue[6] = "And staring at me....";
-    NPCs[2].Dialogue[7] = ".....";
-    NPCs[2].Dialogue[8] = "Okay, im tired, just go away";
-    NPCs[2].Dialogue[9] = "Man, KYS!!!!";
+    NPCs[2].Dialogue[6] = "6 And staring at me....";
+    NPCs[2].Dialogue[7] = "daadasads";
+    NPCs[2].Dialogue[8] = "8 Okay, im tired, just go away";
+    NPCs[2].Dialogue[9] = "9 Man, KYS!!!!";
+
+    NPCs[2].quest.questTarget = "Mage";
+    NPCs[2].quest.questLineNum = 6;
+    NPCs[2].quest.idleLineNum = 7;
+    NPCs[2].quest.questCompleteLineNum = 9;
+    NPCs[2].quest.questPreCompleteLineNum = 8;
+    NPCs[2].quest.expReward = 500;
+    NPCs[2].quest.questReq = 2;
+    NPCs[2].quest.questID = 2;
+    NPCs[2].quest.questText = "Kill 2 mages: ";
+    NPCs[2].quest.questComplete = false;
+
 
     NPCs[3].posX = 19;
     NPCs[3].posY = 19;
-    NPCs[3].Dialogue[0] = " there";
+    NPCs[3].Dialogue[0] = "NPC 3; pos:(19 ,19)";
     NPCs[3].Dialogue[1] = "Do you want something?";
     NPCs[3].Dialogue[2] = "Hey, are you there?";
     NPCs[3].Dialogue[3] = "Did you here me???";
     NPCs[3].Dialogue[4] = "Bro? you okay?";
     NPCs[3].Dialogue[5] = "Why you.. Just stands.. here...";
-    NPCs[3].Dialogue[6] = "And staring at me....";
-    NPCs[3].Dialogue[7] = ".....";
-    NPCs[3].Dialogue[8] = "Okay, im tired, just go away";
-    NPCs[3].Dialogue[9] = "Man, KYS!!!!";
+    NPCs[3].Dialogue[6] = "6 And staring at me....";
+    NPCs[3].Dialogue[7] = "111111";
+    NPCs[3].Dialogue[8] = "8 Okay, im tired, just go away";
+    NPCs[3].Dialogue[9] = "9 Man, KYS!!!!";
+    NPCs[3].quest.questComplete = false;
 
-    Player player;
+
+    NPCs[3].quest.questTarget = "Quests completed";
+    NPCs[3].quest.questLineNum = 6;
+    NPCs[3].quest.idleLineNum = 7;
+    NPCs[3].quest.questCompleteLineNum = 9;
+    NPCs[3].quest.questPreCompleteLineNum = 8;
+    NPCs[3].quest.expReward = 175;
+    NPCs[3].quest.questReq = 1;
+    NPCs[3].quest.questID = 3;
+    NPCs[3].quest.questText = "Kill necromancer: ";
+
+    Player player{};
     player.playerAtk = 10;
     player.playerExp = 0;
+    player.playerMaxExp = 100;
     player.playerHealth = 100;
     player.playerCurHealth = 100;
     player.playerАgility = 2;
+    player.questsCompleted = 0;
     int spawnY = 23;
     int spawnX = 59;
     int bonusАgility = 0;
-    
+
 
     int round = 0;
     int buffer = 0;
-    int bufferX;
-    int bufferY;
+    int enemyID = -1;
+    int bufferX = 0;
+    int bufferY = 0;
     int counter = 0;
     int dialogueCounter = 0;
     int answerCounter = 0;
     int questCompletedCounter = 0;
+    int questID = -1;
     const int n = 44;
     const int m = 156;
     const int textPlacementY = 39;
@@ -274,17 +227,23 @@ int main()
     bool combat = false;
     bool game = true;
     bool dialogue = false;
+
+    bool questTaken = false;
+    bool questComplete = false;
+
     char arr[n][m];
     char combatArr[n][m];
     string statsAttack = "Attack: " + to_string(player.playerAtk);
-    string statsHealth = "Health: " + to_string(player.playerCurHealth)+ "/" + to_string(player.playerHealth);
+    string statsHealth = "Health: " + to_string(player.playerCurHealth) + "/" + to_string(player.playerHealth);
     string statsАgility = "Agility: " + to_string(player.playerАgility);
+    string statsExp = "Exp: " + to_string(player.playerMaxExp) + "/" + to_string(player.playerExp);
+    string questsCompleted = "Quests: " + to_string(questCompletedCounter);
     string bufferForStats;
     bool EnemyAction = false;
 
     virtualF11Press();
     hideCursor();
-   
+
     //Настройка границ и карты
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -301,9 +260,13 @@ int main()
     }
 
     //Текстовые поля в интерфейсе игрока
-    fillTextField(arr[textPlacementY+1], statsАgility, 122);
+    fillTextField(arr[textPlacementY + 1], statsАgility, 122);
     fillTextField(arr[textPlacementY], statsAttack, 122);
-    fillTextField(arr[textPlacementY-1], statsHealth, 122);
+    fillTextField(arr[textPlacementY - 1], statsHealth, 122);
+    fillTextField(arr[textPlacementY - 2], statsExp, 122);
+    fillTextField(arr[textPlacementY - 3], questsCompleted, 122);
+    fillTextField(arr[textPlacementY - 15], "Quest: ", 122);
+    fillTextField(arr[textPlacementY - 14], "No quest", 122);
 
 
     //Настройка границ и поля битвы
@@ -321,6 +284,14 @@ int main()
         }
     }
 
+    fillTextField(combatArr[textPlacementY + 1], statsАgility, 122);
+    fillTextField(combatArr[textPlacementY], statsAttack, 122);
+    fillTextField(combatArr[textPlacementY - 1], statsHealth, 122);
+    fillTextField(combatArr[textPlacementY - 2], statsExp, 122);
+    fillTextField(combatArr[textPlacementY - 3], questsCompleted, 122);
+    fillTextField(combatArr[textPlacementY - 15], "Quest: ", 122);
+    fillTextField(combatArr[textPlacementY - 14], "No quest", 122);
+
     //Спавн объектов на координатах
 
 
@@ -329,39 +300,41 @@ int main()
     arr[NPCs[2].posY][NPCs[2].posX] = '@';
     arr[NPCs[3].posY][NPCs[3].posX] = '@';
 
-    arr[Enemyes[0].posY][Enemyes[0].posX] = '*';    //Enemyes
+    arr[Enemyes[0].posY][Enemyes[0].posX] = '*';
+    arr[Enemyes[0].posY + 3][Enemyes[0].posX + 5] = '*';
+    arr[Enemyes[0].posY + 7][Enemyes[0].posX - 3] = '*';   
+    arr[Enemyes[1].posY][Enemyes[0].posX] = 'x'; 
+    arr[Enemyes[1].posY + 2][Enemyes[0].posX - 3] = 'x'; 
+    arr[Enemyes[1].posY + 5][Enemyes[0].posX + 4] = 'x';
+    arr[Enemyes[2].posY][Enemyes[0].posX] = '+';
+    arr[Enemyes[2].posY + 1][Enemyes[0].posX + 56] = '+';//Enemyes
 
     //Первая отрисовка интерфейса
     mapPrint((char*)arr, m, n);
 
-    
+
     newCursorPosition(spawnX, spawnY);//Player
     clearElement(spawnX, spawnY);
     printChar(spawnX, spawnY, 'O');
 
     while (game) {
-        levelUp(player.playerExp, player.playerAtk, player.playerHealth, player.playerАgility);
-        /*if (player.playerExp == 100) {
-            if (_kbhit()) {
-                switch (_getch()) {
-                case 72: {
-                    player.playerAtk += 3;
-                    player.playerExp = 0;
-                    break;
-                }
-                case 75: {
-                    player.playerExp = 0;
-                    player.playerHealth += 10;
-                    break;
-                }
-                case 77: {
-                    player.playerExp = 0;
-                    player.playerАgility += 2;
-                    break;
-                }
-                }
-            }
-        }*/
+        if (player.playerExp >= player.playerMaxExp) {
+            levelUp(player.playerExp, player.playerAtk, player.playerHealth, player.playerАgility, player.playerMaxExp, player.playerCurHealth);
+            //HP
+            printStat(statsHealth, "Health: " + to_string(player.playerCurHealth) + "/" + to_string(player.playerHealth), textPlacementY - 1);
+
+            //Attack
+            printStat(statsAttack, "Attack: " + to_string(player.playerAtk), textPlacementY);
+
+            //Аgility
+            printStat(statsАgility, "Agility: " + to_string(player.playerАgility), textPlacementY + 1);
+
+            //Exp
+            printStat(statsHealth, "Exp: " + to_string(player.playerMaxExp) + "/" + to_string(player.playerExp), textPlacementY - 2);
+
+            dialogueClear(39, 3);
+        }
+       
         if (_kbhit()) {
             switch (_getch()) {
                 //Sleep(10);
@@ -372,15 +345,18 @@ int main()
                     bufferY = spawnY;
                     bufferX = spawnX;
                     spawnY--;
+                    dialogueClear(39, 3);
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
-                else if (arr[spawnY - 1][spawnX] == '*') {
+                else if (arr[spawnY - 1][spawnX] == '*' || arr[spawnY - 1][spawnX] == 'x' || arr[spawnY - 1][spawnX] == '+') {
                     system("cls");
+                    bufferY = spawnY - 1;
+                    bufferX = spawnX;
                     combat = true;
                 }
                 else if (arr[spawnY - 1][spawnX] == '@') {
                     dialogue = true;
-                  
+                    buffer = NPCChoose(spawnY - 1);
                 }
                 break;
             }
@@ -392,24 +368,21 @@ int main()
                     bufferY = spawnY;
                     bufferX = spawnX;
                     spawnY++;
-
+                    dialogueClear(39, 3);
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
 
-                else if (arr[spawnY + 1][spawnX] == '*') {
+                else if (arr[spawnY + 1][spawnX] == '*' || arr[spawnY + 1][spawnX] == 'x' || arr[spawnY + 1][spawnX] == '+') {
                     system("cls");
+                    bufferY = spawnY + 1;
+                    bufferX = spawnX;
                     combat = true;
                 }
                 else if (arr[spawnY + 1][spawnX] == '@') {
-
+                    dialogue = true;
                     buffer = NPCChoose(spawnY + 1);
-                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer = NPCChoose(spawnY + 1)].Dialogue[dialogueCounter]);
-                    dialogueCounter++;
                 }
-                if (arr[spawnY + 1][spawnX] != '@') {
-                    dialogueClear(textPlacementY, textPlacementX);
-                    dialogueCounter = 0;
-                }
+                
                 break;
             }
                    // Стрелка влево
@@ -418,24 +391,20 @@ int main()
                     bufferX = spawnX;
                     bufferY = spawnY;
                     spawnX--;
-
+                    dialogueClear(39, 3);
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
-                else if (arr[spawnY][spawnX - 1] == '*') {
+                else if (arr[spawnY][spawnX - 1] == '*' || arr[spawnY][spawnX - 1] == 'x' || arr[spawnY][spawnX - 1] == '+') {
                     system("cls");
+                    bufferY = spawnY;
+                    bufferX = spawnX - 1;
                     combat = true;
                 }
                 else if (arr[spawnY][spawnX - 1] == '@') {
-                    //system("cls");
-
+                    dialogue = true;
                     buffer = NPCChoose(spawnY);
-                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer = NPCChoose(spawnY)].Dialogue[dialogueCounter]);
-                    dialogueCounter++;
                 }
-                if (arr[spawnY][spawnX - 1] != '@') {
-                    dialogueClear(textPlacementY, textPlacementX);
-                    dialogueCounter = 0;
-                }
+                
                 break;
             }
 
@@ -449,79 +418,103 @@ int main()
                     bufferY = spawnY;
                     bufferX = spawnX;
                     spawnX++;
-
+                    dialogueClear(39, 3);
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
                 //Встреча с "коллизией" врага
-                else if (arr[spawnY][spawnX + 1] == '*') {
+                else if (arr[spawnY][spawnX + 1] == '*' || arr[spawnY][spawnX + 1] == 'x' || arr[spawnY][spawnX + 1] == '+') {
                     system("cls");
+                    bufferY = spawnY;
+                    bufferX = spawnX + 1;
                     combat = true;
                 }
-                //Разговор с NPC
                 else if (arr[spawnY][spawnX + 1] == '@') {
-                    //Поиск нужного NPC для подгрузки диалогов по его X позиции(стоило бы сделать ещё и по Y) либо переработать по компактнее
+                    dialogue = true;
                     buffer = NPCChoose(spawnY);
-                    // Вывод диалога
-                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer = NPCChoose(spawnY)].Dialogue[dialogueCounter]);
-                    dialogueCounter++;
-
                 }
-                if (arr[spawnY][spawnX + 1] != '@') {
-                    dialogueClear(textPlacementY, textPlacementX);
-                    dialogueCounter = 0;
-                }
+                
                 break;
             }
             }
         }
         //Диалог
         while (dialogue) {
-            
-
-
-
-            /*if (dialogueCounter == NPCs[NPCChoose(spawnY - 1)].questLineNum) {
+            if (NPCs[buffer].quest.questComplete == true) {
+                dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer].Dialogue[NPCs[buffer].quest.questCompleteLineNum]);
                 dialogue = false;
-            }*/
+            }
+            else {
+                if (questTaken && !questComplete && buffer == questID) {
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer].Dialogue[NPCs[buffer].quest.idleLineNum]);
+                    dialogue = false;
+                }
+                else if (!questTaken && !questComplete && !NPCs[buffer].quest.questComplete) {
+                    if (dialogueCounter == 0) {
+                        dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer].Dialogue[0]);
+                        dialogueCounter++;
+                    }
+                    if (dialogueCounter == NPCs[buffer].quest.idleLineNum) {
+                        questTaken = true;
+                        dialogue = false;
+                        questID = NPCs[buffer].quest.questID;
+                        printStat("No quest", NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), textPlacementY - 14);
+                        fillTextField(arr[textPlacementY - 14], NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), 122);
+                        fillTextField(combatArr[textPlacementY - 14], NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), 122);
 
-            //if (dialogueCounter == 0) {
-            //    dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
-            //    counter++;
-            //    dialogueCounter++;
-            //}
-            //if (_kbhit()) {
-            //    switch (_getch()) {
-            //    case 75: {
-            //        answerCounter += pow(2, counter-1);
-            //        dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[answerCounter]);
-            //        Sleep(1700);
-            //        dialogueCounter += pow(2, counter-1);;
-            //        dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
-            //        Sleep(1700);
-            //        counter++;
-            //        break;
-            //    }
-            //    case 77: {
-            //        answerCounter += pow(2, counter);;
-            //        dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Answer[answerCounter]);
-            //        Sleep(1700);
-            //        dialogueCounter += pow(2, counter);;
-            //        dialoguePrint(textPlacementY, textPlacementX, NPCs[NPCChoose(spawnY - 1)].Dialogue[dialogueCounter]);
-            //        Sleep(1700);
-            //        counter++;
-            //        break;
-            //    }
-            //    case 80: {
-            //        dialogue = false;
-            //        break;
-            //    }
-            //    }
-            //}
-            /*if (NPCs[NPCChoose(spawnY - 1)].questLineNum == dialogueCounter) {
-                dialogue = false;
-                dialogueCounter = NPCs[NPCChoose(spawnY - 1)].idleLineNum;
-            }*/
-            
+                    }
+                    if (_kbhit()) {
+                        switch (_getch()) {
+                        case 75: {
+                            dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer].Dialogue[dialogueCounter]);
+                            dialogueCounter++;
+                            break;
+                        }
+                        case 77: {
+                            dialogueCounter = 0;
+                            dialogue = false;
+                            break;
+                        }
+                        default: continue;
+                        }
+                    }
+                }
+                else if (questID != buffer) {
+                    dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer].Dialogue[NPCs[buffer].quest.idleLineNum]);
+                    dialogue = false;
+                }
+                else if (questTaken && questComplete && buffer == questID) {
+                    dialogueCounter = NPCs[buffer].quest.questPreCompleteLineNum;
+                    while (dialogueCounter < NPCs[buffer].quest.questCompleteLineNum) {
+                        if (_kbhit()) {
+                            switch (_getch()) {
+                            case 75: {
+                                dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer].Dialogue[dialogueCounter]);
+                                dialogueCounter++;
+                                break;
+                            }
+                            }
+                        }
+                    }
+                    printStat(NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), "No quest", textPlacementY - 14);
+                    fillTextField(arr[textPlacementY - 14], "No quest", 122);
+                    fillTextField(combatArr[textPlacementY - 14], "No quest", 122);
+                    questTaken = false;
+                    questComplete = false;
+                    NPCs[questID].quest.questComplete = true;
+                    dialogue = false;
+                    questID = -1;
+                    dialogueCounter = 0;
+                    player.questsCompleted++;
+                    fillTextField(arr[textPlacementY - 3], "Quests: " + to_string(player.questsCompleted), 122);
+                    fillTextField(combatArr[textPlacementY - 3], "Quests: " + to_string(player.questsCompleted), 122);
+                    printStat(statsHealth, "Quests: " + to_string(player.questsCompleted), textPlacementY - 3);
+                    player.playerExp += NPCs[buffer].quest.expReward;
+                }
+            }
+            //72 Стрелка вверх
+            //80 Стрелка вниз
+            //75 Стрелка влево
+            //77 Стрелка вправо 
         }
         // Бой
         while (combat) {
@@ -529,6 +522,20 @@ int main()
             if (round == 0)
             {
                 round++;
+                switch (arr[bufferY][bufferX]) {
+                case '*': {
+                    enemyID = 0;
+                    break;
+                }
+                case 'x': {
+                    enemyID = 1;
+                    break;
+                }
+                case '+': {
+                    enemyID = 2;
+                    break;
+                }
+                }
                 system("cls");
                 for (int i = 0; i < n; i++) {
                     for (int j = 0; j < m; j++) {
@@ -536,7 +543,7 @@ int main()
                     }
                     cout << '\n';
                 }
-                dialoguePrint(2, 3, "round "  + to_string(round));
+                dialoguePrint(2, 3, "round " + to_string(round));
 
                 printStat(statsHealth, "Health: " + to_string(player.playerCurHealth) + "/" + to_string(player.playerHealth), textPlacementY - 1);
 
@@ -546,15 +553,24 @@ int main()
                 //Аgility
                 printStat(statsАgility, "Agility: " + to_string(player.playerАgility), textPlacementY + 1);
 
-                dialoguePrint(Enemyes[0].HPposY, Enemyes[0].HPposX, to_string(Enemyes[0].curHealth) + "/" + to_string(Enemyes[0].health));
+                //Exp
+                printStat(statsHealth, "Exp: " + to_string(player.playerMaxExp) + "/" + to_string(player.playerExp), textPlacementY - 2);
+
+                dialoguePrint(Enemyes[enemyID].HPposY, Enemyes[enemyID].HPposX, to_string(Enemyes[enemyID].curHealth) + "/" + to_string(Enemyes[enemyID].health));
+                dialoguePrint(textPlacementY, textPlacementX, "Choose youre action: [<] - Attack, [>] - Block + heal");
             }
-            if (_kbhit()) {
-                switch (_getch()) {
+            
+            if (_kbhit()) {   
+                char key = _getch();
+                switch (key) {
                     //Атака игрока
                     //Есть идея о шансе на успешную атаку, либо механика критов, пока не решил
                 case 75: {
-                    Enemyes[0].curHealth -= player.playerAtk;
-                    dialoguePrint(Enemyes[0].HPposY, Enemyes[0].HPposX, to_string(Enemyes[0].curHealth) + "/" + to_string(Enemyes[0].health));
+                    Enemyes[enemyID].curHealth -= player.playerAtk;
+                    if (Enemyes[enemyID].curHealth < 0)
+                        Enemyes[enemyID].curHealth = 0;
+                    dialoguePrint(Enemyes[enemyID].HPposY, Enemyes[enemyID].HPposX, to_string(Enemyes[enemyID].curHealth) + "/" + to_string(Enemyes[enemyID].health));
+
                     dialoguePrint(textPlacementY, textPlacementX, "Enemy has been succesfuly hit!");
                     EnemyAction = true;
                     break;
@@ -565,7 +581,7 @@ int main()
                        //2.Стата "Сила", которая будет давать поглощение %входящего урона(новый показатель брони),
                        //тогда защита увеличит плоско(либо процентно(?)) показатель брони до следующего хода
                 case 77: {
-                    
+
                     buffer = (2 * player.playerАgility) / 3;
                     bonusАgility = buffer;
                     buffer = (player.playerHealth * .05) + (player.playerАgility * .02 * player.playerHealth);
@@ -574,9 +590,9 @@ int main()
                     if (player.playerCurHealth > player.playerHealth)
                         player.playerCurHealth = player.playerHealth;
 
-                    printStat(statsАgility, "Agility: " +to_string(player.playerАgility + bonusАgility), textPlacementY + 1);
+                    printStat(statsАgility, "Agility: " + to_string(player.playerАgility + bonusАgility), textPlacementY + 1);
                     printStat(statsHealth, "Health: " + to_string(player.playerCurHealth) + "/" + to_string(player.playerHealth), textPlacementY - 1);
-                    dialoguePrint(textPlacementY, textPlacementX, "Youve healed " + to_string (buffer) + "HP and gain " + to_string(bonusАgility)+" bonus agility for 1 round");
+                    dialoguePrint(textPlacementY, textPlacementX, "Youve healed " + to_string(buffer) + "HP and gain " + to_string(bonusАgility) + " bonus agility for 1 round");
                     Sleep(1700);
                     dialoguePrint(textPlacementY, textPlacementX, "Now you feel determined and ready for fight!");
                     Sleep(1700);
@@ -587,11 +603,25 @@ int main()
                 }
                 }
                 //Победа в битве
-                if (Enemyes[0].curHealth <= 0) {
+                if (Enemyes[enemyID].curHealth <= enemyID) {
 
                     combat = false;             //Отключает цикл боя
-                    player.playerExp += Enemyes[0].exp;
-                    arr[Enemyes[0].posY][Enemyes[0].posX] = ' ';  //Удаляет врага с карты и ставит на его место игрока
+                    EnemyAction = false;
+
+                    player.playerExp += Enemyes[enemyID].exp + 2 * round;
+                    Enemyes[enemyID].curHealth = Enemyes[enemyID].health;
+
+                    arr[bufferY][bufferX] = ' ';  //Удаляет врага с карты и ставит на его место игрока
+
+                    if (questID > -1 && Enemyes[enemyID].enemyName == NPCs[questID].quest.questTarget) {
+                        NPCs[questID].quest.questCounter++;
+                        printStat(NPCs[questID].quest.questText + " ", NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), textPlacementY - 14);
+                        fillTextField(arr[textPlacementY - 14], NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), 122);
+                    }
+
+                    if (questID > -1 && NPCs[questID].quest.questCounter == NPCs[questID].quest.questReq) {
+                        questComplete = true;
+                    }
                     //spawnX = Enemyes[0].posX;
                     //spawnY = Enemyes[0].posY;
                     //arr[spawnY][spawnX] = 'O';
@@ -601,32 +631,35 @@ int main()
                     system("cls");
 
 
-                    //Обновление текстовых значений после боя(!сделать отдельной функцией!)
+                    //Обновление текстовых значений после боя
                     mapPrint((char*)arr, m, n);
-                    
+
                     //Player
                     newCursorPosition(spawnX, spawnY);
                     clearElement(spawnX, spawnY);
                     printChar(spawnX, spawnY, 'O');
 
                     //Health
-                    printStat(statsHealth, "Health: " + to_string(player.playerCurHealth)+"/"+ to_string(player.playerHealth), textPlacementY - 1);
+                    printStat(statsHealth, "Health: " + to_string(player.playerCurHealth) + "/" + to_string(player.playerHealth), textPlacementY - 1);
 
                     //Attack
                     printStat(statsAttack, "Attack: " + to_string(player.playerAtk), textPlacementY);
 
                     //Аgility
                     printStat(statsАgility, "Agility: " + to_string(player.playerАgility), textPlacementY + 1);
+
+                    //Exp
+                    printStat(statsHealth, "Exp: " + to_string(player.playerMaxExp) + "/" + to_string(player.playerExp), textPlacementY - 2);
                     break;
                 }
 
                 //Атака врага(пока только атака, потом будет ещё защита(?) с рандомным выбором по формуле нужного действия
-                //Нашёл ошибкц, пока не разберусь как переписать, починю костылём, всё равно боёвку пока не буду делать
+                //Нашёл ошибку, пока не разберусь как переписать, починю костылём, всё равно боёвку пока не буду делать
                 if (combat && EnemyAction) {
-                    if ((player.playerАgility+bonusАgility)*2 <= Enemyes[0].atk) {
+                    if ((player.playerАgility + bonusАgility) * 2 <= Enemyes[enemyID].atk) {
                         Sleep(1700);
-                        player.playerCurHealth -= Enemyes[0].atk;
-                        dialoguePrint(Enemyes[0].HPposY, Enemyes[0].HPposX, to_string(Enemyes[0].curHealth) + "/" + to_string(Enemyes[0].health));
+                        player.playerCurHealth -= Enemyes[enemyID].atk;
+                        dialoguePrint(Enemyes[enemyID].HPposY, Enemyes[enemyID].HPposX, to_string(Enemyes[enemyID].curHealth) + "/" + to_string(Enemyes[enemyID].health));
                         dialoguePrint(textPlacementY, textPlacementX, "Youve bin hit!");
                         printStat(statsHealth, "Health: " + to_string(player.playerCurHealth) + "/" + to_string(player.playerHealth), textPlacementY - 1);
                     }
@@ -634,15 +667,17 @@ int main()
                         Sleep(1700);
                         dialoguePrint(textPlacementY, textPlacementX, "Enemie miss!");
                     }
-                    
+
                     bonusАgility = 0;
                     printStat(statsАgility, "Agility: " + to_string(player.playerАgility), textPlacementY + 1);
                     EnemyAction = false;
                     round++;
+                    Sleep(1700);
                     dialoguePrint(2, 3, "round " + to_string(round));
+                    dialoguePrint(textPlacementY, textPlacementX, "Choose youre action: [<] - Attack, [>] - Block + heal");
                 }
             }
-            
+
         }
     }
     system("cls");

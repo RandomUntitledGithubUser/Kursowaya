@@ -59,8 +59,8 @@ void clearElement(int posX, int posY) {
     printChar(posX, posY, ' ');
 }
 
-int NPCChoose(int pos) {
-    switch (pos) {
+int NPCChoose(int posY) {
+    switch (posY) {
     case 23: {
         return 0;
     }
@@ -73,6 +73,7 @@ int NPCChoose(int pos) {
     case 19: {
         return 3;
     }
+    default: return -1;
 
     }
 }
@@ -81,7 +82,7 @@ void printStat(string stat, string oldStat, int textPlacement) {
     string buffer = stat;
     stat = oldStat;
 
-    if (buffer.length() > stat.length())
+    while (buffer.length() > stat.length())
         stat += " ";
 
     for (int i = 0; i < stat.length(); i++) {
@@ -92,6 +93,7 @@ void printStat(string stat, string oldStat, int textPlacement) {
     newCursorPosition(122, textPlacement);
     printString(122, textPlacement, stat);
 }
+
 
 void dialogueClear(int y, int x) {
     for (int i = x; i < 118; i++) {
@@ -126,27 +128,54 @@ void hideCursor() {
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
-void levelUp(int &playerExp, int &statAtk, int &statHealth, int &statAgility) {
-    if (playerExp == 100) {
+void levelUp(int &playerExp, int &statAtk, int &statHealth, int &statAgility, int& playerMaxExp, int& playerCurHealth) {
+    dialoguePrint(39, 3, "LVL UP! Choose what to upgrade: < +3 Atk, ^ - + 10 HP, > - +2 Aglt");
+   /* while (playerExp >= playerMaxExp) {
         if (_kbhit()) {
             switch (_getch()) {
-            case 72: {
+            case 75: {
                 statAtk += 3;
-                playerExp = 0;
+                playerExp = playerExp - playerMaxExp;
+                playerMaxExp = playerMaxExp * 2;
                 break;
             }
-            case 75: {
-                playerExp = 0;
+            case 73: {
+                playerExp = playerExp - playerMaxExp;
                 statHealth += 10;
+                playerMaxExp = playerMaxExp * 2;
                 break;
             }
             case 77: {
-                playerExp = 0;
+                playerExp = playerExp - playerMaxExp;
                 statAgility += 2;
+                playerMaxExp = playerMaxExp * 2;
                 break;
             }
             }
         }
+    }*/
+    while (playerExp >= playerMaxExp) {
+        if (_kbhit()) {
+            char key = _getch();
+            switch (key) {
+            case 75: {
+                statAtk += 3;
+                break; 
+            }
+            case 72: {
+                statHealth += 10;
+                break; 
+            }
+            case 77: {
+                statAgility += 2;
+                break;
+            }
+            default: 
+                continue;
+            }
+            playerExp -= playerMaxExp;
+            playerMaxExp *= 2;
+        }
     }
-
+    playerCurHealth = statHealth;
 };

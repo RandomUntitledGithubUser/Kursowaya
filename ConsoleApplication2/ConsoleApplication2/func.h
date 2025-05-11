@@ -32,4 +32,4 @@ void playerMove(int, int, int, int);
 
 void hideCursor();
 
-void levelUp(int&, int&, int&, int&);
+void levelUp(int&, int&, int&, int&, int&, int&);
