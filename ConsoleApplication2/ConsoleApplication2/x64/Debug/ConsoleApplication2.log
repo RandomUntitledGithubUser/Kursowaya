@@ -1,3 +1,5 @@
 ﻿  ConsoleApplication2.cpp
-E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(588,58): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(860,58): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  func.cpp
+  Создание кода...
   ConsoleApplication2.vcxproj -> E:\Reposit\Kursowaya\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe

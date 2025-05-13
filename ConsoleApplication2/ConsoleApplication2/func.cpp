@@ -129,7 +129,7 @@ void hideCursor() {
 }
 
 void levelUp(int &playerExp, int &statAtk, int &statHealth, int &statAgility, int& playerMaxExp, int& playerCurHealth) {
-    dialoguePrint(39, 3, "LVL UP! Choose what to upgrade: < +3 Atk, ^ - + 10 HP, > - +2 Aglt");
+    dialoguePrint(39, 3, "LVL UP! Choose what to upgrade: [<] +3 Atk, [^] - + 10 HP, [>] - +2 Aglt");
    /* while (playerExp >= playerMaxExp) {
         if (_kbhit()) {
             switch (_getch()) {
@@ -179,3 +179,72 @@ void levelUp(int &playerExp, int &statAtk, int &statHealth, int &statAgility, in
     }
     playerCurHealth = statHealth;
 };
+
+enum MenuOption { START = 0, CONTROLS, EXIT };
+
+// Функция, отображающая экран управления
+void showControls() {
+    system("cls");
+    cout << "Game control:\n";
+    cout << "---------------------\n";
+    cout << "[^]Up arrow - move up\n";
+    cout << "[v]Down arrow - move down\n";
+    cout << "[>]Right arrow - move right/left dialogue\n";
+    cout << "[<]Left arrow - move left/next dialogue\n";
+    cout << "\nPress any key to exit to main menu...";
+    _getch();
+}
+
+// Функция главного меню
+void showMenu() {
+    int selected = START;
+    const int totalOptions = 3;
+    bool menuActive = true;
+
+    while (menuActive) {
+        // Очищаем экран
+        system("cls");
+        cout << "  _  __      _       _     _    ____                  _ \n";
+        cout << " | |/ /     (_)     | |   | |  / __ \\                | | \n";
+        cout << " | ' / _ __  _  __ _| |__ | |_| |  | |_   _  ___  ___| |\n";
+        cout << " |  < | '_ \\| |/ _` | '_ \\| __| |  | | | | |/ _ \\/ __| __|\n";
+        cout << " | . \\| | | | | (_| | | | | |_| |__| | |_| |  __/\\__ \\ |_ \n";
+        cout << " |_|\\_\\_| |_|_|\\__, |_| |_|\\__|\\___\\_\\\\__,_|\\___||___/\\__|\n";
+        cout << "                __/ |                                     \n";
+        cout << "               |___/                                      \n";
+        cout << "----------------------------------------------------------\n";
+        cout << (selected == START ? ">> " : "  ") << "Start game\n";
+        cout << (selected == CONTROLS ? ">> " : "  ") << "Controls\n";
+        cout << (selected == EXIT ? ">> " : "  ") << "Exit\n";
+
+        // Получаем нажатую клавишу.
+        // Для стрелок сначала приходит 224, затем код конкретной стрелки.
+        int key = _getch();
+
+        if (key == 224) {
+            key = _getch(); // Получаем второй код
+            if (key == 72) {            // Стрелка вверх
+                selected = (selected - 1 + totalOptions) % totalOptions;
+            }
+            else if (key == 80) {     // Стрелка вниз
+                selected = (selected + 1) % totalOptions;
+            }
+            else if (key == 77) {     // Стрелка вправо
+                switch (selected) {
+                case START:
+                    // Закрываем меню и начинаем игру
+                    menuActive = false;
+                    break;
+                case CONTROLS:
+                    // Показываем экран управления
+                    showControls();
+                    break;
+                case EXIT:
+                    // Завершаем игру
+                    exit(0);
+                    break;
+                }
+            }
+        }
+    }
+}
