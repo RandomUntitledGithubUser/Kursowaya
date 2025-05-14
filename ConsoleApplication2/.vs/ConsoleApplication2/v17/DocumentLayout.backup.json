@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{4DB04F56-25CA-4C7B-853A-83A827F33662}|ConsoleApplication2\\ConsoleApplication2.vcxproj|C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\ConsoleApplication2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{4DB04F56-25CA-4C7B-853A-83A827F33662}|ConsoleApplication2\\ConsoleApplication2.vcxproj|solutionrelative:ConsoleApplication2\\ConsoleApplication2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DB04F56-25CA-4C7B-853A-83A827F33662}|ConsoleApplication2\\ConsoleApplication2.vcxproj|C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\func.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{4DB04F56-25CA-4C7B-853A-83A827F33662}|ConsoleApplication2\\ConsoleApplication2.vcxproj|solutionrelative:ConsoleApplication2\\func.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DB04F56-25CA-4C7B-853A-83A827F33662}|ConsoleApplication2\\ConsoleApplication2.vcxproj|C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\func.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{4DB04F56-25CA-4C7B-853A-83A827F33662}|ConsoleApplication2\\ConsoleApplication2.vcxproj|solutionrelative:ConsoleApplication2\\func.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +22,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "func.cpp",
+              "DocumentMoniker": "C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\func.cpp",
+              "RelativeDocumentMoniker": "ConsoleApplication2\\func.cpp",
+              "ToolTip": "C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\func.cpp",
+              "RelativeToolTip": "ConsoleApplication2\\func.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKUAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-14T09:15:37.676Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "func.h",
+              "DocumentMoniker": "C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\func.h",
+              "RelativeDocumentMoniker": "ConsoleApplication2\\func.h",
+              "ToolTip": "C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\func.h",
+              "RelativeToolTip": "ConsoleApplication2\\func.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-05-14T09:15:35.513Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +58,7 @@
               "RelativeDocumentMoniker": "ConsoleApplication2\\ConsoleApplication2.cpp",
               "ToolTip": "C:\\Users\\Asus\\Documents\\GitHub\\Kursowaya\\ConsoleApplication2\\ConsoleApplication2\\ConsoleApplication2.cpp",
               "RelativeToolTip": "ConsoleApplication2\\ConsoleApplication2.cpp",
-              "ViewState": "AgIAAMABAAAAAAAAAAAAwOQBAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAPQBAAAAAAAAAAAAAHwBAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-03-05T10:35:45.214Z",
               "EditorCaption": ""

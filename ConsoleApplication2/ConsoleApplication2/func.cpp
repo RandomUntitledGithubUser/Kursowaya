@@ -163,7 +163,7 @@ void levelUp(int &playerExp, int &statAtk, int &statHealth, int &statAgility, in
                 break; 
             }
             case 72: {
-                statHealth += 10;
+                statHealth += 20;
                 break; 
             }
             case 77: {
@@ -174,7 +174,7 @@ void levelUp(int &playerExp, int &statAtk, int &statHealth, int &statAgility, in
                 continue;
             }
             playerExp -= playerMaxExp;
-            playerMaxExp *= 2;
+            playerMaxExp += 35;
         }
     }
     playerCurHealth = statHealth;

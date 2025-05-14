@@ -38,7 +38,7 @@ struct Player {
 struct NPC {
     string NPCName;
     string Dialogue[10];
-    string Answer[10];
+    //string Answer[10];
     int wrongAnsw[3];
     int posX, posY;
     Quest quest;
@@ -55,6 +55,7 @@ struct Door {
     int posX, posY;
     bool closed = true;
     int questID;
+    int idk;
 };
 
 
@@ -66,7 +67,7 @@ int main()
     system("cls");
 
     NPC NPCs[4];
-    Enemy Enemyes[3];
+    Enemy Enemyes[4];
     Door Doors[4];
 
     Doors[0].posX = 25;
@@ -111,11 +112,21 @@ int main()
     Enemyes[2].posX = 11;
     Enemyes[2].health = 100;
     Enemyes[2].curHealth = 100;
-    Enemyes[2].atk = 100;
+    Enemyes[2].atk = 20;
     Enemyes[2].exp = 250;
     Enemyes[2].HPposX = 50;
     Enemyes[2].HPposY = 12;
     Enemyes[2].enemyName = "Mage";
+
+    Enemyes[3].posY = 14;
+    Enemyes[3].posX = 15;
+    Enemyes[3].health = 225;
+    Enemyes[3].curHealth = 225;
+    Enemyes[3].atk = 35;
+    Enemyes[3].exp = 0;
+    Enemyes[3].HPposX = 50;
+    Enemyes[3].HPposY = 12;
+    Enemyes[3].enemyName = "Necromancer";
 
     // Ввожу NPC, их корды, диалоги +идея сделать враждебных NPC(?)(не самое главное)
     NPCs[0].posY = 23;
@@ -130,7 +141,7 @@ int main()
     NPCs[0].Dialogue[7] = "7 Hello there! Come back when complete my quest, my man!";
     NPCs[0].Dialogue[8] = "8 Hey, youv'e did it! Really nice, there's youre reward, friend!";
     NPCs[0].Dialogue[9] = "9 Hello there!";
-    // NPCs[0].questLineNum = 4;
+
     NPCs[0].quest.questTarget = "Skeleton";
     NPCs[0].quest.questLineNum = 6;
     NPCs[0].quest.idleLineNum = 7;
@@ -143,17 +154,6 @@ int main()
     NPCs[0].quest.questComplete = false;
 
 
-    NPCs[0].Answer[1] = "1 Hello! Yes, of courese, thats what im looking for!";
-    NPCs[0].Answer[2] = "2 Nahh, don't interested";
-    NPCs[0].Answer[3] = "3 Yes, i can";
-    NPCs[0].Answer[4] = "4";
-    NPCs[0].Answer[5] = "5 See you";
-    NPCs[0].Answer[6] = "6 Well, I think i changed my mind. Maybe later";
-    NPCs[0].Answer[7] = "7 Well, I think i changed my mind. Maybe later";
-    NPCs[0].Answer[0] = "0 Hello!";
-
-    //NPCs[0].questComplete = false;
-    //NPCs[0].questTaken = false;
 
     NPCs[1].posY = 26;
     NPCs[1].posX = 100;
@@ -220,7 +220,7 @@ int main()
     NPCs[3].quest.questComplete = false;
 
 
-    NPCs[3].quest.questTarget = "Quests completed";
+    NPCs[3].quest.questTarget = "Necromancer";
     NPCs[3].quest.questLineNum = 6;
     NPCs[3].quest.idleLineNum = 7;
     NPCs[3].quest.questCompleteLineNum = 9;
@@ -353,16 +353,41 @@ int main()
         "           *************",
         "          *****     *****",
         "         ***           ***",
-        "        ***             ***",
-        "        **    0     0    **",
-        "        **               **                  ____",
-        "        ***             ***             //////////",
-        "        ****           ****        /////////////// ",
-        "        *****         *****    ///////////////////",
-        "        ******       ******/////////         |  |",
-        "      *********     ****//////               |  |",
-        "   *************   **/////*****              |  |",
-        "  *************** **///***********          *|  |",
+        "        ***             ***                   /\\",
+        "        **    x     X    **                   \\/",
+        "        **       v       **                  _][_",
+        "        ***             ***                   [] ",
+        "        ****   ^^^^^   ****                  [  ]  ",
+        "        *****         *****                  [  ]",
+        "        ******       ********                ]  [",
+        "      *********     **********               |  |",
+        "   *************   ************              |  |",
+        "  *************** ****************          *|  |",
+        " ************************************    ****| <=>",
+        "*********************************************|<===>",
+        "*********************************************| <==>",
+        "***************************** ***************| <=>",
+        "******************************* *************|  |",
+        "********************************** **********|  |*",
+        "*********************************** *********|  |"
+    };
+
+
+    char necromancer[21][61]{
+        "            *********",
+        "           *************",
+        "          *****     *****",
+        "         ***    Z      ***                    /\\",
+        "        ***             ***                  |  |",
+        "        **  <X>     <->  **                  \\  /",
+        "        **               **                  _][_",
+        "        ***      ^      ***                   [] ",
+        "        ****   ^^^^^   ****                  [  ]  ",
+        "        *****  ^^^^^  *****                  [  ]",
+        "        ******   V   ********                ]  [",
+        "      *********     **********               |  |",
+        "   *************   ************              |  |",
+        "  *************** ****************          *|  |",
         " ************************************    ****| <=>",
         "*********************************************|<===>",
         "*********************************************| <==>",
@@ -449,7 +474,8 @@ int main()
     arr[Enemyes[1].posY + 2][Enemyes[1].posX - 3] = 'x'; 
     arr[Enemyes[1].posY + 5][Enemyes[1].posX + 4] = 'x';
     arr[Enemyes[2].posY][Enemyes[2].posX] = '+';
-    arr[Enemyes[2].posY + 1][Enemyes[2].posX + 56] = '+';//Enemyes
+    arr[Enemyes[2].posY + 1][Enemyes[2].posX + 56] = '+';
+    arr[Enemyes[2].posY + 1][Enemyes[2].posX + 56] = '#';//Enemyes
 
     //Первая отрисовка интерфейса
     mapPrint((char*)arr, m, n);
@@ -490,7 +516,7 @@ int main()
                     dialogueClear(39, 3);
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
-                else if (arr[spawnY - 1][spawnX] == '*' || arr[spawnY - 1][spawnX] == 'x' || arr[spawnY - 1][spawnX] == '+') {
+                else if (arr[spawnY - 1][spawnX] == '*' || arr[spawnY - 1][spawnX] == 'x' || arr[spawnY - 1][spawnX] == '+' || arr[spawnY - 1][spawnX] == '#') {
                     system("cls");
                     bufferY = spawnY - 1;
                     bufferX = spawnX;
@@ -526,7 +552,7 @@ int main()
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
 
-                else if (arr[spawnY + 1][spawnX] == '*' || arr[spawnY + 1][spawnX] == 'x' || arr[spawnY + 1][spawnX] == '+') {
+                else if (arr[spawnY + 1][spawnX] == '*' || arr[spawnY + 1][spawnX] == 'x' || arr[spawnY + 1][spawnX] == '+' || arr[spawnY + 1][spawnX] == '#') {
                     system("cls");
                     bufferY = spawnY + 1;
                     bufferX = spawnX;
@@ -561,7 +587,7 @@ int main()
                     dialogueClear(39, 3);
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
-                else if (arr[spawnY][spawnX - 1] == '*' || arr[spawnY][spawnX - 1] == 'x' || arr[spawnY][spawnX - 1] == '+') {
+                else if (arr[spawnY][spawnX - 1] == '*' || arr[spawnY][spawnX - 1] == 'x' || arr[spawnY][spawnX - 1] == '+' || arr[spawnY][spawnX - 1] == '#') {
                     system("cls");
                     bufferY = spawnY;
                     bufferX = spawnX - 1;
@@ -597,7 +623,7 @@ int main()
                     playerMove(spawnX, spawnY, bufferX, bufferY);
                 }
                 //Встреча с "коллизией" врага
-                else if (arr[spawnY][spawnX + 1] == '*' || arr[spawnY][spawnX + 1] == 'x' || arr[spawnY][spawnX + 1] == '+') {
+                else if (arr[spawnY][spawnX + 1] == '*' || arr[spawnY][spawnX + 1] == 'x' || arr[spawnY][spawnX + 1] == '+' || arr[spawnY][spawnX + 1] == '#') {
                     system("cls");
                     bufferY = spawnY;
                     bufferX = spawnX + 1;
@@ -785,6 +811,13 @@ int main()
                     drwCounter = 21;
                     break;
                 }
+                case '#': {
+                    drwX = -32;
+                    drwY = 1;
+                    enemyID = 3;
+                    drwCounter = 21;
+                    break;
+                }
                 default: enemyID = 0;
                 }
                 system("cls");
@@ -806,6 +839,10 @@ int main()
                         }
                         case 2: {
                             printChar(X, Y, mage[i][j]);
+                            break;
+                        }
+                        case 3: {
+                            printChar(X, Y, necromancer[i][j]);
                             break;
                         }
                         }
