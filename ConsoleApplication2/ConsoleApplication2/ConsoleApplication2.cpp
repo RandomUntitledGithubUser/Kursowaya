@@ -440,14 +440,14 @@ int main()
             }
         }
     }
-
+    //Вывод арта персонажа
     for (int i = 2, k = 0; i < 17; i++, k++) {
         for (int j = 122, l = 0; j < m - 3; j++, l++) {
             arr[i][j] = heroPortrait[k][l];
             combatArr[i][j] = heroPortrait[k][l];
         }
     }
-
+    //Текстовые поля в интерфейсе игрока во время боя
     fillTextField(combatArr[textPlacementY + 1], statsАgility, 122);
     fillTextField(combatArr[textPlacementY], statsAttack, 122);
     fillTextField(combatArr[textPlacementY - 1], statsHealth, 122);
@@ -487,6 +487,7 @@ int main()
 
     while (game) {
         if (player.playerExp >= player.playerMaxExp) {
+            //Обновление текстовых полей после увеличесн
             levelUp(player.playerExp, player.playerAtk, player.playerHealth, player.playerАgility, player.playerMaxExp, player.playerCurHealth);
             //HP
             printStat(statsHealth, "Health: " + to_string(player.playerCurHealth) + "/" + to_string(player.playerHealth), textPlacementY - 1);
@@ -629,10 +630,12 @@ int main()
                     bufferX = spawnX + 1;
                     combat = true;
                 }
+                //NPC
                 else if (arr[spawnY][spawnX + 1] == '@') {
                     dialogue = true;
                     buffer = NPCChoose(spawnY);
                 }
+                //Дверь встреча
                 else if (arr[spawnY][spawnX + 1] == 'D') {
                     for (int i = 0; i < 4; i++) {
                         if (Doors[i].posY == spawnY && Doors[i].posX == spawnX + 1 && Doors[i].questID == questID) {
@@ -758,6 +761,7 @@ int main()
                             }
                         }
                     }
+                    //Обновление всех флагов и текстовых полей по завершению квеста
                     Sleep(1700);
                     printStat(NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), "No quest", textPlacementY - 14);
                     fillTextField(arr[textPlacementY - 14], "                                 ", 122);
@@ -822,7 +826,7 @@ int main()
                 }
                 system("cls");
                 mapPrint((char*)combatArr, m, n);
-
+                //Вывод арта врага
                 int Y = Enemyes[enemyID].HPposY + drwY;
                 int X = Enemyes[enemyID].HPposX + drwX;
                 for (int i = 0; i < drwCounter; i++) {
@@ -891,7 +895,7 @@ int main()
                        //2.Стата "Сила", которая будет давать поглощение %входящего урона(новый показатель брони),
                        //тогда защита увеличит плоско(либо процентно(?)) показатель брони до следующего хода
                 case 77: {
-
+                    //Формулы для получения бонусной ловкости и лечения
                     buffer = (2 * player.playerАgility) / 3;
                     bonusАgility = buffer;
                     buffer = (player.playerHealth * .05) + (player.playerАgility * .02 * player.playerHealth);
@@ -922,13 +926,13 @@ int main()
                     Enemyes[enemyID].curHealth = Enemyes[enemyID].health;
 
                     arr[bufferY][bufferX] = ' ';  //Удаляет врага с карты и ставит на его место игрока
-
+                    //Проверка для квеста
                     if (questID > -1 && Enemyes[enemyID].enemyName == NPCs[questID].quest.questTarget) {
                         NPCs[questID].quest.questCounter++;
                         printStat(NPCs[questID].quest.questText + " ", NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), textPlacementY - 14);
                         fillTextField(arr[textPlacementY - 14], NPCs[questID].quest.questText + to_string(NPCs[questID].quest.questCounter), 122);
                     }
-
+                    //Проверка на выполнение квеста
                     if (questID > -1 && NPCs[questID].quest.questCounter == NPCs[questID].quest.questReq) {
                         questComplete = true;
                     }
@@ -963,8 +967,7 @@ int main()
                     break;
                 }
 
-                //Атака врага(пока только атака, потом будет ещё защита(?) с рандомным выбором по формуле нужного действия
-                //Нашёл ошибку, пока не разберусь как переписать, починю костылём, всё равно боёвку пока не буду делать
+                //Атака врага
                 if (combat && EnemyAction) {
                     if ((player.playerАgility + bonusАgility) * 2 <= Enemyes[enemyID].atk) {
                         Sleep(1700);
@@ -977,7 +980,7 @@ int main()
                         Sleep(1700);
                         dialoguePrint(textPlacementY, textPlacementX, "Enemie miss!");
                     }
-
+                    //Обновление флагов
                     bonusАgility = 0;
                     printStat(statsАgility, "Agility: " + to_string(player.playerАgility), textPlacementY + 1);
                     EnemyAction = false;
@@ -986,6 +989,7 @@ int main()
                     dialoguePrint(2, 3, "round " + to_string(round));
                     dialoguePrint(textPlacementY, textPlacementX, "Choose youre action: [<] - Attack, [>] - Block + heal");
                 }
+                //Проигрышь
                 if (player.playerCurHealth <= 0) {
                     system("cls");
                     cout << "\n\n\n\n\n\n                     __     ______  _    _   _      ____   _____ ______ \n                     \\ \\   / / __ \\| |  | | | |    / __ \\ / ____|  ____|\n                      \\ \\_/ / |  | | |  | | | |   | |  | | (___ | |__   \n                       \\   /| |  | | |  | | | |   | |  | |\\___ \\|  __|  \n                        | | | |__| | |__| | | |___| |__| |____) | |____ \n                        |_|  \\____/ \\____/  |______\\____/|_____/|______|\n\n\n\n";

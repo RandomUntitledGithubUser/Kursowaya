@@ -217,12 +217,10 @@ void showMenu() {
         cout << (selected == CONTROLS ? ">> " : "  ") << "Controls\n";
         cout << (selected == EXIT ? ">> " : "  ") << "Exit\n";
 
-        // Получаем нажатую клавишу.
-        // Для стрелок сначала приходит 224, затем код конкретной стрелки.
         int key = _getch();
 
         if (key == 224) {
-            key = _getch(); // Получаем второй код
+            key = _getch(); 
             if (key == 72) {            // Стрелка вверх
                 selected = (selected - 1 + totalOptions) % totalOptions;
             }
@@ -232,15 +230,15 @@ void showMenu() {
             else if (key == 77) {     // Стрелка вправо
                 switch (selected) {
                 case START:
-                    // Закрываем меню и начинаем игру
+                    
                     menuActive = false;
                     break;
                 case CONTROLS:
-                    // Показываем экран управления
+                   
                     showControls();
                     break;
                 case EXIT:
-                    // Завершаем игру
+                   
                     exit(0);
                     break;
                 }
