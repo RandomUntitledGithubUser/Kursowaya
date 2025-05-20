@@ -31,7 +31,7 @@ void virtualF11Press() {
 }
 
 
-void fillTextField(char arr[], string textField, int placementX) {
+void fillTextField(char *arr, string textField, int placementX) {
     for (int i = 0, j = placementX; i < textField.length(); j++, i++)
         arr[j] = textField[i];
 };
@@ -61,16 +61,16 @@ void clearElement(int posX, int posY) {
 
 int NPCChoose(int posY) {
     switch (posY) {
-    case 23: {
+    case 8: {
         return 0;
     }
-    case 26: {
+    case 23: {
         return 1;
     }
     case 9: {
         return 2;
     }
-    case 19: {
+    case 17: {
         return 3;
     }
     default: return -1;
@@ -242,6 +242,79 @@ void showMenu() {
                     exit(0);
                     break;
                 }
+            }
+        }
+    }
+}
+
+
+void processPlayerMovement(char arr[][156], int m,
+    int& spawnX, int& spawnY, int& bufferX, int& bufferY,
+    bool& combat, bool& dialogue, int& buffer,
+    Door Doors[], int numDoors, int questID, int textPlacementY)
+{
+    // Считывает нажатую клавишу
+    int key = _getch();
+    int newX = spawnX, newY = spawnY;
+
+    switch (key) {
+    case 72: { // Стрелка вверх
+        newY = spawnY - 1;
+        break;
+    }
+    case 80: { // Стрелка вниз
+        newY = spawnY + 1;
+        break;
+    }
+    case 75: { // Стрелка влево
+        newX = spawnX - 1;
+        break;
+    }
+    case 77: { // Стрелка вправо
+        newX = spawnX + 1;
+        break;
+    }
+    default:
+        return; // Если нажата другая клавиша — выходим
+    }
+
+    // Получаем символ из карты по новому расположению
+    char cell = arr[newY][newX];
+
+    // Если ячейка пуста — перемещаем игрока
+    if (cell == ' ') {
+        bufferX = spawnX;
+        bufferY = spawnY;
+        spawnX = newX;
+        spawnY = newY;
+        dialogueClear(textPlacementY, 3);
+        playerMove(spawnX, spawnY, bufferX, bufferY);
+    }
+    // Если символ указывает на врага — включаем режим боя
+    else if (cell == '*' || cell == 'x' || cell == '+' || cell == '#') {
+        system("cls");
+        // Сохранение переменных для битвы
+        bufferX = newX;
+        bufferY = newY;
+        combat = true;
+    }
+    // Если встречен NPC
+    else if (cell == '@') {
+        dialogue = true;
+        buffer = NPCChoose(newY);
+    }
+    // Если встречена дверь и ID квеста совпадает, перемещает игрока
+    else if (cell == 'D') {
+        for (int i = 0; i < numDoors; i++) {
+            if (Doors[i].posX == newX && Doors[i].posY == newY && Doors[i].questID == questID) {
+                // Обновление переменных
+                bufferX = spawnX;
+                bufferY = spawnY;
+                spawnX = newX;
+                spawnY = newY;
+                arr[newY][newX] = ' ';  // Убирает дверь с карты
+                dialogueClear(textPlacementY, 3);
+                playerMove(spawnX, spawnY, bufferX, bufferY);
             }
         }
     }

@@ -1,3 +1,4 @@
 ﻿  ConsoleApplication2.cpp
-C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(901,58): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-  ConsoleApplication2.vcxproj -> C:\Users\Asus\Documents\GitHub\Kursowaya\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(788,58): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+E:\Reposit\Kursowaya\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(858,28): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+  ConsoleApplication2.vcxproj -> E:\Reposit\Kursowaya\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe

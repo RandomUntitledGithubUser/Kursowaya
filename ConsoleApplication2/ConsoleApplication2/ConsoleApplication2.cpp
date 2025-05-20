@@ -7,58 +7,6 @@
 
 using namespace std;
 
-struct Quest {
-    string questName;
-    int questCounter = 0;
-    int questReq;
-    int questID;
-    string questTarget;
-    string questText;
-    bool questComplete;
-    int questLineNum;
-    int idleLineNum;
-    int questPreCompleteLineNum;
-    int questCompleteLineNum;
-    int expReward;
-};
-
-struct Player {
-    int questsCompleted;
-    int playerAtk;
-    int playerExp;
-    int playerMaxExp;
-    int playerHealth;
-    int playerCurHealth;
-    int playerАgility;
-    int spawnY;
-    int spawnX;
-    int bonusАgility;
-};
-
-struct NPC {
-    string NPCName;
-    string Dialogue[10];
-    //string Answer[10];
-    int wrongAnsw[3];
-    int posX, posY;
-    Quest quest;
-};
-
-struct Enemy {
-    string enemyName;
-    int posX, posY;
-    int health, curHealth, atk, exp;
-    int HPposX, HPposY;
-};
-
-struct Door {
-    int posX, posY;
-    bool closed = true;
-    int questID;
-    int idk;
-};
-
-
 int main()
 {
     virtualF11Press();
@@ -68,23 +16,27 @@ int main()
 
     NPC NPCs[4];
     Enemy Enemyes[4];
-    Door Doors[4];
+    Door Doors[5];
 
-    Doors[0].posX = 25;
-    Doors[0].posY = 25;
+    Doors[0].posX = 45;
+    Doors[0].posY = 7;
     Doors[0].questID = 0;
 
-    Doors[1].posX = 35;
-    Doors[1].posY = 5;
+    Doors[1].posX = 37;
+    Doors[1].posY = 25;
     Doors[1].questID = 1;
 
-    Doors[2].posX = 35;
-    Doors[2].posY = 10;
+    Doors[2].posX = 84;
+    Doors[2].posY = 8;
     Doors[2].questID = 2;
 
-    Doors[3].posX = 65;
-    Doors[3].posY = 20;
+    Doors[3].posX = 113;
+    Doors[3].posY = 31;
     Doors[3].questID = 3;
+
+    Doors[4].posX = 14;
+    Doors[4].posY = 17;
+    Doors[4].questID = 10;
 
 
     //Ввожу врагов, их корды, имена и статы
@@ -100,8 +52,8 @@ int main()
 
     Enemyes[1].posY = 10;
     Enemyes[1].posX = 100;
-    Enemyes[1].health = 50;
-    Enemyes[1].curHealth = 50;
+    Enemyes[1].health = 5;
+    Enemyes[1].curHealth = 5;
     Enemyes[1].atk = 8;
     Enemyes[1].exp = 60;
     Enemyes[1].HPposX = 50;
@@ -110,8 +62,8 @@ int main()
 
     Enemyes[2].posY = 11;
     Enemyes[2].posX = 11;
-    Enemyes[2].health = 100;
-    Enemyes[2].curHealth = 100;
+    Enemyes[2].health = 10;
+    Enemyes[2].curHealth = 10;
     Enemyes[2].atk = 20;
     Enemyes[2].exp = 250;
     Enemyes[2].HPposX = 50;
@@ -120,8 +72,8 @@ int main()
 
     Enemyes[3].posY = 14;
     Enemyes[3].posX = 15;
-    Enemyes[3].health = 225;
-    Enemyes[3].curHealth = 225;
+    Enemyes[3].health = 2;
+    Enemyes[3].curHealth = 2;
     Enemyes[3].atk = 35;
     Enemyes[3].exp = 0;
     Enemyes[3].HPposX = 50;
@@ -129,7 +81,7 @@ int main()
     Enemyes[3].enemyName = "Necromancer";
 
     // Ввожу NPC, их корды, диалоги +идея сделать враждебных NPC(?)(не самое главное)
-    NPCs[0].posY = 23;
+    NPCs[0].posY = 8;
     NPCs[0].posX = 61;
     NPCs[0].Dialogue[0] = "0 Hello there! I've heard about you.";
     NPCs[0].Dialogue[1] = "1 Your'e that brave hero who's quest to free our lands from that evil necromacer?";
@@ -155,7 +107,7 @@ int main()
 
 
 
-    NPCs[1].posY = 26;
+    NPCs[1].posY = 23;
     NPCs[1].posX = 100;
     NPCs[1].Dialogue[0] = "NPC 1; pos:(26,100)";
     NPCs[1].Dialogue[1] = "Do you want something?";
@@ -174,7 +126,7 @@ int main()
     NPCs[1].quest.questCompleteLineNum = 9;
     NPCs[1].quest.questPreCompleteLineNum = 8;
     NPCs[1].quest.expReward = 550;
-    NPCs[1].quest.questReq = 6;
+    NPCs[1].quest.questReq = 1;
     NPCs[1].quest.questID = 1;
     NPCs[1].quest.questText = "Kill 6 zombies: ";
     NPCs[1].quest.questComplete = false;
@@ -199,14 +151,14 @@ int main()
     NPCs[2].quest.questCompleteLineNum = 9;
     NPCs[2].quest.questPreCompleteLineNum = 8;
     NPCs[2].quest.expReward = 1500;
-    NPCs[2].quest.questReq = 2;
+    NPCs[2].quest.questReq = 1;
     NPCs[2].quest.questID = 2;
     NPCs[2].quest.questText = "Kill 2 mages: ";
     NPCs[2].quest.questComplete = false;
 
 
-    NPCs[3].posX = 19;
-    NPCs[3].posY = 19;
+    NPCs[3].posX = 5;
+    NPCs[3].posY = 17;
     NPCs[3].Dialogue[0] = "NPC 3; pos:(19 ,19)";
     NPCs[3].Dialogue[1] = "Do you want something?";
     NPCs[3].Dialogue[2] = "Hey, are you there?";
@@ -274,25 +226,25 @@ int main()
     string bufferForStats;
     bool EnemyAction = false;
 
-    char heroPortrait[15][32] = { 
-        "      _,.                      ", 
-        "    ,` -.)                     ", 
-        "   ( _/-\\\\-._                  ", 
-        "  /,|`--._,-^|            ,    ", 
-        "  \\_| |`-._/||          ,'|    ", 
-        "    |  `-, / |         /  /    ", 
-        "    |     || |        /  /     ", 
-        "     `r-._||/   __   /  /      ", 
-        " __,-<_     )`-/  `./  /       ", 
-        "'  \\   `---'   \\   /  /        ", 
-        "    |           |./  /         ", 
-        "    /           //  /          ", 
+    char heroPortrait[15][32] = {
+        "      _,.                      ",
+        "    ,` -.)                     ",
+        "   ( _/-\\\\-._                  ",
+        "  /,|`--._,-^|            ,    ",
+        "  \\_| |`-._/||          ,'|    ",
+        "    |  `-, / |         /  /    ",
+        "    |     || |        /  /     ",
+        "     `r-._||/   __   /  /      ",
+        " __,-<_     )`-/  `./  /       ",
+        "'  \\   `---'   \\   /  /        ",
+        "    |           |./  /         ",
+        "    /           //  /          ",
         "\\_/' \\         |/  /           ",
         "-------------------------------",
         "         Brave knight          "
     };
 
-    char skeleton[25][61]{ 
+    char skeleton[25][61]{
         "                              _.--\"\"-._",
         "  .                         .\"         \".",
         " / \\    ,^.         /(     Y             |      )\\",
@@ -372,7 +324,6 @@ int main()
         "*********************************** *********|  |"
     };
 
-
     char necromancer[21][61]{
         "            *********",
         "           *************",
@@ -396,34 +347,74 @@ int main()
         "********************************** **********|  |*",
         "*********************************** *********|  |"
     };
-    
+
+    char map[44][157] = {
+        "------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "|                                                                                                                      | --------------------------------- |",
+        "|                                        |-------|     ^                                                               | |      _,.                      | |",
+        "|              *                         |   *   |    /|\\                                                              | |    ,` -.)                     | |",
+        "|                            |<<<>>>|    |       |    /|\\                                                              | |   ( _/-\\\\-._                  | |",
+        "|                       ^    |<o<>>>|    | *     |    /|\\                        /-----\\                               | |  /,|`--._,-^|            ,    | |",
+        "|                      /|\\   |<<<>>>|    |     * |     |                         | +   |                               | |  \\_| |`-._/||          ,'|    | |",
+        "|        *             /|\\   |<<<>>>|    |---D---|                               |   + |                               | |    |  `-, / |         /  /    | |",
+        "|                       |         @                 ^                            \\--D--/                               | |    |     || |        /  /     | |",
+        "|                                                  /|\\                             @                                   | |     `r-._||/   __   /  /      | |",
+        "|        /--\\                                       |                                                                  | | __,-<_     )`-/  `./  /       | |",
+        "|        \\--/                                                                                                          | |'  \\   `---'   \\   /  /        | |",
+        "|                                                                                                                      | |    |           |./  /         | |",
+        "|                                                                                                                      | |    /           //  /          | |",
+        "|   /--------\\                                                                                                         | |\\_/' \\         |/  /           | |",
+        "|  |]        [|                                                                                                        | --------------------------------- |",
+        "|  |   0   0  |                                                                                                        |           Brave knight            |",
+        "|  |[@        D                                                                                                        |                                   |",
+        "|  |   0   0  |                                                                                                        |                                   |",
+        "|  |]        [|                                                                                                        |                                   |",
+        "|   \\--------/                                                                                                         |                                   |",
+        "|                                                                                           X                          |                                   |",
+        "|                                                                                                                 ^    |                                   |",
+        "|        /--\\                              @                                                                     /|\\   |                                   |",
+        "|  ^     \\--/                                                                        ^              ^            /|\\   |  Quest:                           |",
+        "| /|\\              ^    |------------D------------|                                 /|\\            /|\\            |    |  No quest                         |",
+        "| /|\\           * /|\\   |H H H H H H   H H H H H H|                    ^         ,  /|\\  x   ^     /|\\                 |                                   |",
+        "|  |         ^    /|\\   |      *          *       |                   /|\\   *       /|\\     /|\\     |   .  ___---x_____|                                   |",
+        "|           /|\\   /|\\   |H H H H H H  *H H H H H H|                   /|\\            |      /|\\           /|   *  * /  |                                   |",
+        "|         * /|\\    |    |    *     *   x          |                    |         x       .  /|\\    .      \\/  x  * x\\  |                                   |",
+        "|    ^       |          |H H H H H H   H H*H H H H|                           ^              |            /|     +   \\ |                                   |",
+        "|   /|\\       *         |     x x            x    |                       x  /|\\     x         в\\        \\|-  /--D-----|                                   |",
+        "|   /|\\                 |H H H H H H   H H H H H H|                          /|\\    ,          \\/         /\\  /        |                                   |",
+        "|    |                  |     x      *   x        |                           |          *               / |\\/   #     |                                   |",
+        "------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "|                                                                                                                      |                                   |",
+        "|                                                                                                                      |  Quests: 0                        |",
+        "|                                                                                                                      |  Exp: 25/0                        |",
+        "|                                                                                                                      |  Health: 100/100                  |",
+        "|                                                                                                                      |  Attack: 10                       |",
+        "|                                                                                                                      |  Agility: 2                       |",
+        "|                                                                                                                      |                                   |",
+        "|                                                                                                                      |                                   |",
+        "------------------------------------------------------------------------------------------------------------------------------------------------------------"
+    };
 
     //Настройка границ и карты
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            if (i == 0 || i == 34 || i == n - 1 || ((j > 120 && j < m - 2) && (i == 1 || i == 15))) {
-                arr[i][j] = '-';
-            }
-            else if (j == 0 || j == 119 || ((j == 121 || j == m - 3) && (i > 1 && i < 15)) ||  j == m - 1) {
-                arr[i][j] = '|';
-            }
-            else {
-                arr[i][j] = ' ';
-            }
+            arr[i][j] = map[i][j];
         }
     }
-    
 
-   
+
+
+
+
 
     //Текстовые поля в интерфейсе игрока
-    fillTextField(arr[textPlacementY + 1], statsАgility, 122);
+    /*fillTextField(arr[textPlacementY + 1], statsАgility, 122);
     fillTextField(arr[textPlacementY], statsAttack, 122);
     fillTextField(arr[textPlacementY - 1], statsHealth, 122);
     fillTextField(arr[textPlacementY - 2], statsExp, 122);
     fillTextField(arr[textPlacementY - 3], questsCompleted, 122);
     fillTextField(arr[textPlacementY - 15], "Quest: ", 122);
-    fillTextField(arr[textPlacementY - 14], "No quest", 122);
+    fillTextField(arr[textPlacementY - 14], "No quest", 122);*/
 
 
     //Настройка границ и поля битвы
@@ -443,7 +434,6 @@ int main()
     //Вывод арта персонажа
     for (int i = 2, k = 0; i < 17; i++, k++) {
         for (int j = 122, l = 0; j < m - 3; j++, l++) {
-            arr[i][j] = heroPortrait[k][l];
             combatArr[i][j] = heroPortrait[k][l];
         }
     }
@@ -456,27 +446,13 @@ int main()
     fillTextField(combatArr[textPlacementY - 15], "Quest: ", 122);
     fillTextField(combatArr[textPlacementY - 14], "No quest", 122);
 
-    //Спавн объектов на координатах
-    arr[Doors[0].posY][Doors[0].posX] = 'D';
-    arr[Doors[1].posY][Doors[1].posX] = 'D';
-    arr[Doors[2].posY][Doors[2].posX] = 'D';
-    arr[Doors[3].posY][Doors[3].posX] = 'D';
 
-    arr[NPCs[0].posY][NPCs[0].posX] = '@';          //NPCs
-    arr[NPCs[1].posY][NPCs[1].posX] = '@';
-    arr[NPCs[2].posY][NPCs[2].posX] = '@';
-    arr[NPCs[3].posY][NPCs[3].posX] = '@';
-
-    arr[Enemyes[0].posY][Enemyes[0].posX] = '*';
-    arr[Enemyes[0].posY + 3][Enemyes[0].posX + 5] = '*';
-    arr[Enemyes[0].posY + 7][Enemyes[0].posX - 3] = '*';   
-    arr[Enemyes[1].posY][Enemyes[1].posX] = 'x'; 
-    arr[Enemyes[1].posY + 2][Enemyes[1].posX - 3] = 'x'; 
-    arr[Enemyes[1].posY + 5][Enemyes[1].posX + 4] = 'x';
-    arr[Enemyes[2].posY][Enemyes[2].posX] = '+';
-    arr[Enemyes[2].posY + 1][Enemyes[2].posX + 56] = '+';
-    arr[Enemyes[2].posY + 1][Enemyes[2].posX + 56] = '#';//Enemyes
-
+    dialoguePrint(20, 4, "Youre quest is to kill evil necromancer! But first you need to get stonger!");
+    Sleep(2500);
+    system("cls");
+    dialoguePrint(20, 4, "You need to complete some quest from neerby peasants to train your skills!");
+    Sleep(2500);
+    system("cls");
     //Первая отрисовка интерфейса
     mapPrint((char*)arr, m, n);
 
@@ -486,6 +462,7 @@ int main()
     printChar(spawnX, spawnY, 'O');
 
     while (game) {
+
         if (player.playerExp >= player.playerMaxExp) {
             //Обновление текстовых полей после увеличесн
             levelUp(player.playerExp, player.playerAtk, player.playerHealth, player.playerАgility, player.playerMaxExp, player.playerCurHealth);
@@ -503,190 +480,14 @@ int main()
 
             dialogueClear(39, 3);
         }
-       
+
         if (_kbhit()) {
-            switch (_getch()) {
-                //Sleep(10);
-            // Стрелка вверх
-                //GetAsyncKeyState('S');
-            case 72: {
-                if (arr[spawnY - 1][spawnX] == ' ') {
-                    bufferY = spawnY;
-                    bufferX = spawnX;
-                    spawnY--;
-                    dialogueClear(39, 3);
-                    playerMove(spawnX, spawnY, bufferX, bufferY);
-                }
-                else if (arr[spawnY - 1][spawnX] == '*' || arr[spawnY - 1][spawnX] == 'x' || arr[spawnY - 1][spawnX] == '+' || arr[spawnY - 1][spawnX] == '#') {
-                    system("cls");
-                    bufferY = spawnY - 1;
-                    bufferX = spawnX;
-                    combat = true;
-                }
-                else if (arr[spawnY - 1][spawnX] == '@') {
-                    dialogue = true;
-                    buffer = NPCChoose(spawnY - 1);
-                }
-                else if (arr[spawnY - 1][spawnX] == 'D') {
-                    for (int i = 0; i < 4; i++) {
-                        if (Doors[i].posY == spawnY - 1 && Doors[i].posX == spawnX && Doors[i].questID == questID) {
-                            bufferY = spawnY;
-                            bufferX = spawnX;
-                            spawnY--;
-                            arr[Doors[i].posY][Doors[i].posX] = ' ';
-                            dialogueClear(39, 3);
-                            playerMove(spawnX, spawnY, bufferX, bufferY);
-                        }
-                    }
-                }
-                break;
-            }
-
-
-                   // Стрелка вниз
-            case 80: {
-                if (arr[spawnY + 1][spawnX] == ' ') {
-                    bufferY = spawnY;
-                    bufferX = spawnX;
-                    spawnY++;
-                    dialogueClear(39, 3);
-                    playerMove(spawnX, spawnY, bufferX, bufferY);
-                }
-
-                else if (arr[spawnY + 1][spawnX] == '*' || arr[spawnY + 1][spawnX] == 'x' || arr[spawnY + 1][spawnX] == '+' || arr[spawnY + 1][spawnX] == '#') {
-                    system("cls");
-                    bufferY = spawnY + 1;
-                    bufferX = spawnX;
-                    combat = true;
-                }
-                else if (arr[spawnY + 1][spawnX] == '@') {
-                    dialogue = true;
-                    buffer = NPCChoose(spawnY + 1);
-                }
-                else if (arr[spawnY + 1][spawnX] == 'D') {
-                    for (int i = 0; i < 4; i++) {
-                        if (Doors[i].posY == spawnY + 1 && Doors[i].posX == spawnX && Doors[i].questID == questID) {
-                            bufferY = spawnY;
-                            bufferX = spawnX;
-                            spawnY++;
-                            arr[Doors[i].posY][Doors[i].posX] = ' ';
-                            dialogueClear(39, 3);
-                            playerMove(spawnX, spawnY, bufferX, bufferY);
-                        }
-                    }
-                }
-
-                
-                break;
-            }
-                   // Стрелка влево
-            case 75: {
-                if (arr[spawnY][spawnX - 1] == ' ') {
-                    bufferX = spawnX;
-                    bufferY = spawnY;
-                    spawnX--;
-                    dialogueClear(39, 3);
-                    playerMove(spawnX, spawnY, bufferX, bufferY);
-                }
-                else if (arr[spawnY][spawnX - 1] == '*' || arr[spawnY][spawnX - 1] == 'x' || arr[spawnY][spawnX - 1] == '+' || arr[spawnY][spawnX - 1] == '#') {
-                    system("cls");
-                    bufferY = spawnY;
-                    bufferX = spawnX - 1;
-                    combat = true;
-                }
-                else if (arr[spawnY][spawnX - 1] == '@') {
-                    dialogue = true;
-                    buffer = NPCChoose(spawnY);
-                }
-                else if (arr[spawnY][spawnX - 1] == 'D') {
-                    for (int i = 0; i < 4; i++) {
-                        if (Doors[i].posY == spawnY && Doors[i].posX == spawnX-1 && Doors[i].questID == questID) {
-                            bufferY = spawnY;
-                            bufferX = spawnX;
-                            spawnX--;
-                            arr[Doors[i].posY][Doors[i].posX] = ' ';
-                            dialogueClear(39, 3);
-                            playerMove(spawnX, spawnY, bufferX, bufferY);
-                        }
-                    }
-                }
-                
-                break;
-            }
-                   // Стрелка вправо
-            case 77: {
-                //Передвижение по карте
-                if (arr[spawnY][spawnX + 1] == ' ') {
-                    bufferY = spawnY;
-                    bufferX = spawnX;
-                    spawnX++;
-                    dialogueClear(39, 3);
-                    playerMove(spawnX, spawnY, bufferX, bufferY);
-                }
-                //Встреча с "коллизией" врага
-                else if (arr[spawnY][spawnX + 1] == '*' || arr[spawnY][spawnX + 1] == 'x' || arr[spawnY][spawnX + 1] == '+' || arr[spawnY][spawnX + 1] == '#') {
-                    system("cls");
-                    bufferY = spawnY;
-                    bufferX = spawnX + 1;
-                    combat = true;
-                }
-                //NPC
-                else if (arr[spawnY][spawnX + 1] == '@') {
-                    dialogue = true;
-                    buffer = NPCChoose(spawnY);
-                }
-                //Дверь встреча
-                else if (arr[spawnY][spawnX + 1] == 'D') {
-                    for (int i = 0; i < 4; i++) {
-                        if (Doors[i].posY == spawnY && Doors[i].posX == spawnX + 1 && Doors[i].questID == questID) {
-                            bufferY = spawnY;
-                            bufferX = spawnX;
-                            spawnX++;
-                            arr[Doors[i].posY][Doors[i].posX] = ' ';
-                            dialogueClear(39, 3);
-                            playerMove(spawnX, spawnY, bufferX, bufferY);
-                        }
-                    }
-                }
-                
-                break;
-            }
-            }
+            processPlayerMovement(arr, m, spawnX, spawnY, bufferX, bufferY,
+                combat, dialogue, buffer, Doors, 4, questID, textPlacementY);
         }
 
-        //if (_kbhit()) {
-        //    char key = _getch();
-        //    switch (key) {
-        //    case 72:  // стрелка вверх
-        //        processPlayerMovement(arr, n, m,
-        //            spawnX, spawnY,
-        //            0, -1,
-        //            combat, dialogue, buffer, bufferX, bufferY,
-        //            questID, Doors, 4);
-        //        break;
-        //    case 80:  // стрелка вниз
-        //        processPlayerMovement(arr, n, m,
-        //            spawnX, spawnY,
-        //            0, 1,
-        //            combat, dialogue, buffer, bufferX, bufferY,
-        //            questID, Doors, 4);
-        //        break;
-        //    case 75:  // стрелка влево
-        //        processPlayerMovement(arr, n, m,
-        //            spawnX, spawnY,
-        //            -1, 0,
-        //            combat, dialogue, buffer, bufferX, bufferY,
-        //            questID, Doors, 4);
-        //        break;
-        //    case 77:  // стрелка вправо
-        //        processPlayerMovement(arr, n, m,
-        //            spawnX, spawnY,
-        //            1, 0,
-        //            combat, dialogue, buffer, bufferX, bufferY,
-        //            questID, Doors, 4);
-        //        break;
-        //    }
-        //}
+
+        
         //Диалог
         while (dialogue) {
             //If wrong NPC ID
@@ -779,6 +580,10 @@ int main()
                     fillTextField(combatArr[textPlacementY - 3], "Quests: " + to_string(player.questsCompleted), 122);
                     printStat(statsHealth, "Quests: " + to_string(player.questsCompleted), textPlacementY - 3);
                     player.playerExp += NPCs[buffer].quest.expReward;
+                    if (player.questsCompleted == 3) {
+                        arr[Doors[4].posY][Doors[4].posX] = ' ';
+                        clearElement(Doors[4].posX, Doors[4].posY);
+                    }
                 }
             }
             //72 Стрелка вверх
@@ -822,7 +627,12 @@ int main()
                     drwCounter = 21;
                     break;
                 }
-                default: enemyID = 0;
+                default: {
+                    enemyID = 0;
+                    drwCounter = 25;
+                    drwX = -32;
+                    drwY = 1;
+                }
                 }
                 system("cls");
                 mapPrint((char*)combatArr, m, n);
@@ -835,7 +645,7 @@ int main()
                         switch (enemyID) {
                         case 0: {
                             printChar(X, Y, skeleton[i][j]);
-                            break; 
+                            break;
                         }
                         case 1: {
                             printChar(X, Y, zombie[i][j]);
@@ -873,8 +683,8 @@ int main()
 
                 dialoguePrint(textPlacementY, textPlacementX, "Choose youre action: [<] - Attack, [>] - Block + heal");
             }
-            
-            if (_kbhit()) {   
+
+            if (_kbhit()) {
                 char key = _getch();
                 switch (key) {
                     //Атака игрока
@@ -917,7 +727,7 @@ int main()
                 }
                 }
                 //Победа в битве
-                if (Enemyes[enemyID].curHealth <= 0) {
+                if (Enemyes[enemyID].curHealth <= 0 && Enemyes[enemyID].enemyName != "Necromancer") {
 
                     combat = false;             //Отключает цикл боя
                     EnemyAction = false;
@@ -964,6 +774,14 @@ int main()
 
                     //Exp
                     printStat(statsHealth, "Exp: " + to_string(player.playerMaxExp) + "/" + to_string(player.playerExp), textPlacementY - 2);
+                    break;
+                }
+                else if (Enemyes[enemyID].curHealth <= 0 && Enemyes[enemyID].enemyName == "Necromancer") {
+                    game = false;
+                    combat == false;
+                    system("cls");
+                    cout << "You win!\n\n\n\n\n";
+                    system("pause");
                     break;
                 }
 
