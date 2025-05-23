@@ -18,6 +18,8 @@ int main()
     Enemy Enemyes[4];
     Door Doors[5];
 
+
+    //Инициализация структур для дверей
     Doors[0].posX = 45;
     Doors[0].posY = 7;
     Doors[0].questID = 0;
@@ -450,7 +452,7 @@ int main()
     dialoguePrint(20, 4, "Youre quest is to kill evil necromancer! But first you need to get stonger!");
     Sleep(2500);
     system("cls");
-    dialoguePrint(20, 4, "You need to complete some quest from neerby peasants to train your skills!");
+    dialoguePrint(20, 4, "You need to complete some quest from neerby peasants to train your skills before final showdown!");
     Sleep(2500);
     system("cls");
     //Первая отрисовка интерфейса
@@ -458,7 +460,7 @@ int main()
 
 
     newCursorPosition(spawnX, spawnY);//Player
-    clearElement(spawnX, spawnY);
+    //clearElement(spawnX, spawnY);
     printChar(spawnX, spawnY, 'O');
 
     while (game) {
@@ -541,7 +543,7 @@ int main()
                         }
                     }
                 }
-                //Wrong NPC dialogue start(not that whos quest is taken)
+                //Wrong NPC dialogue start(not that who s quest is taken)
                 else if (questID != buffer) {
                     dialoguePrint(textPlacementY, textPlacementX, NPCs[buffer].Dialogue[NPCs[buffer].quest.idleLineNum]);
                     dialogue = false;
