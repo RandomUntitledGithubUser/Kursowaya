@@ -129,28 +129,28 @@ void hideCursor() {
 }
 
 void levelUp(int &playerExp, int &statAtk, int &statHealth, int &statAgility, int& playerMaxExp, int& playerCurHealth) {
-    dialoguePrint(39, 3, "LVL UP! Choose what to upgrade: [<] +3 Atk, [^] - + 10 HP, [>] - +2 Aglt");
+    dialoguePrint(39, 3, "LVL UP! Choose what to upgrade: [<] +5 Atk, [^] - + 35 HP, [>] - +4 Aglt");
     while (playerExp >= playerMaxExp) {
         if (_kbhit()) {
             char key = _getch();
             switch (key) {
             case 75: {
-                statAtk += 3;
+                statAtk += 5;
                 break; 
             }
             case 72: {
-                statHealth += 20;
+                statHealth += 35;
                 break; 
             }
             case 77: {
-                statAgility += 2;
+                statAgility += 4;
                 break;
             }
             default: 
                 continue;
             }
             playerExp -= playerMaxExp;
-            playerMaxExp += 35;
+            playerMaxExp += 30;
         }
     }
     playerCurHealth = statHealth;
@@ -255,10 +255,10 @@ void processPlayerMovement(char arr[][156], int m,
     }
 
     // Получаем символ из карты по новому расположению
-    char cell = arr[newY][newX];
+    char elem = arr[newY][newX];
 
     // Если ячейка пуста — перемещаем игрока
-    if (cell == ' ') {
+    if (elem == ' ') {
         bufferX = spawnX;
         bufferY = spawnY;
         spawnX = newX;
@@ -267,7 +267,7 @@ void processPlayerMovement(char arr[][156], int m,
         playerMove(spawnX, spawnY, bufferX, bufferY);
     }
     // Если символ указывает на врага — включаем режим боя
-    else if (cell == '*' || cell == 'x' || cell == '+' || cell == '#') {
+    else if (elem == '*' || elem == 'x' || elem == '+' || elem == '#') {
         system("cls");
         // Сохранение переменных для битвы
         bufferX = newX;
@@ -275,12 +275,12 @@ void processPlayerMovement(char arr[][156], int m,
         combat = true;
     }
     // Если встречен NPC
-    else if (cell == '@') {
+    else if (elem == '@') {
         dialogue = true;
         buffer = NPCChoose(newY);
     }
     // Если встречена дверь и ID квеста совпадает, перемещает игрока
-    else if (cell == 'D') {
+    else if (elem == 'D') {
         for (int i = 0; i < numDoors; i++) {
             if (Doors[i].posX == newX && Doors[i].posY == newY && Doors[i].questID == questID) {
                 // Обновление переменных

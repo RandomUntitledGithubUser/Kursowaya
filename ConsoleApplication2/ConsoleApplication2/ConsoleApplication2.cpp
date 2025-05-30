@@ -55,7 +55,7 @@ int main()
     Enemyes[1].posY = 10;
     Enemyes[1].posX = 100;
     Enemyes[1].health = 5;
-    Enemyes[1].curHealth = 5;
+    Enemyes[1].curHealth = 55;
     Enemyes[1].atk = 8;
     Enemyes[1].exp = 60;
     Enemyes[1].HPposX = 50;
@@ -65,8 +65,8 @@ int main()
     Enemyes[2].posY = 11;
     Enemyes[2].posX = 11;
     Enemyes[2].health = 10;
-    Enemyes[2].curHealth = 10;
-    Enemyes[2].atk = 20;
+    Enemyes[2].curHealth = 105;
+    Enemyes[2].atk = 15;
     Enemyes[2].exp = 250;
     Enemyes[2].HPposX = 50;
     Enemyes[2].HPposY = 12;
@@ -75,26 +75,26 @@ int main()
     Enemyes[3].posY = 14;
     Enemyes[3].posX = 15;
     Enemyes[3].health = 2;
-    Enemyes[3].curHealth = 2;
-    Enemyes[3].atk = 35;
+    Enemyes[3].curHealth = 225;
+    Enemyes[3].atk = 30;
     Enemyes[3].exp = 0;
     Enemyes[3].HPposX = 50;
     Enemyes[3].HPposY = 12;
     Enemyes[3].enemyName = "Necromancer";
 
     // Ввожу NPC, их корды, диалоги +идея сделать враждебных NPC(?)(не самое главное)
-    NPCs[0].posY = 8;
-    NPCs[0].posX = 61;
-    NPCs[0].Dialogue[0] = "0 Hello there! I've heard about you.";
-    NPCs[0].Dialogue[1] = "1 Your'e that brave hero who's quest to free our lands from that evil necromacer?";
-    NPCs[0].Dialogue[2] = "2 Thats great! But you need to prove your skills first?. I can help with that!";
-    NPCs[0].Dialogue[3] = "3 Theres some skeletons who ruining my crops, and you see, im too old for the fight";
-    NPCs[0].Dialogue[4] = "4 So, Youre quest will be to kill those 3 skeletons. Seems not very hard to you, am i right?";
-    NPCs[0].Dialogue[5] = "5 Ill be wait for you right here";
-    NPCs[0].Dialogue[6] = "6 And, of course, I will grant you some reward for that!";
-    NPCs[0].Dialogue[7] = "7 Hello there! Come back when complete my quest, my man!";
-    NPCs[0].Dialogue[8] = "8 Hey, youv'e did it! Really nice, there's youre reward, friend!";
-    NPCs[0].Dialogue[9] = "9 Hello there!";
+    //NPCs[0].posY = 8;
+    //NPCs[0].posX = 61;
+    NPCs[0].Dialogue[0] = "Hello there! I've heard about you.";
+    NPCs[0].Dialogue[1] = "Your'e that brave hero who's quest to free our lands from that evil necromacer?";
+    NPCs[0].Dialogue[2] = "Thats great! But you need to prove your skills first?. I can help with that!";
+    NPCs[0].Dialogue[3] = "Theres some skeletons who ruining my crops, and you see, im too old for the fight";
+    NPCs[0].Dialogue[4] = "So, Youre quest will be to kill those 3 skeletons. Seems not very hard to you, am i right?";
+    NPCs[0].Dialogue[5] = "Ill be wait for you right here";
+    NPCs[0].Dialogue[6] = "And, of course, I will grant you some reward for that!";
+    NPCs[0].Dialogue[7] = "Hello there! Come back when complete my quest, my man!";
+    NPCs[0].Dialogue[8] = "Hey, youv'e did it! Really nice, there's youre reward, friend!";
+    NPCs[0].Dialogue[9] = "Hello there!";
 
     NPCs[0].quest.questTarget = "Skeleton";
     NPCs[0].quest.questLineNum = 6;
@@ -102,25 +102,25 @@ int main()
     NPCs[0].quest.questCompleteLineNum = 9;
     NPCs[0].quest.questPreCompleteLineNum = 8;
     NPCs[0].quest.expReward = 175;
-    NPCs[0].quest.questReq = 1;
+    NPCs[0].quest.questReq = 3;
     NPCs[0].quest.questID = 0;
     NPCs[0].quest.questText = "Kill 3 skeletons: ";
     NPCs[0].quest.questComplete = false;
 
 
 
-    NPCs[1].posY = 23;
-    NPCs[1].posX = 100;
-    NPCs[1].Dialogue[0] = "NPC 1; pos:(26,100)";
-    NPCs[1].Dialogue[1] = "Do you want something?";
-    NPCs[1].Dialogue[2] = "Hey, are you there?";
-    NPCs[1].Dialogue[3] = "Did you here me???";
-    NPCs[1].Dialogue[4] = "Bro? you okay?";
-    NPCs[1].Dialogue[5] = "Why you.. Just stands.. here...";
-    NPCs[1].Dialogue[6] = "6 And staring at me....";
-    NPCs[1].Dialogue[7] = "fffffffffffffffff";
-    NPCs[1].Dialogue[8] = "8 Okay, im tired, just go away";
-    NPCs[1].Dialogue[9] = "9 Man, KYS!!!!";
+    //NPCs[1].posY = 23;
+    //NPCs[1].posX = 100;
+    NPCs[1].Dialogue[0] = "Hey there! I see you a royal knight? am I right?";
+    NPCs[1].Dialogue[1] = "Anyways, look like you can get rid of some \"promlems?\"";
+    NPCs[1].Dialogue[2] = "You see, that necromancer been here, at graveyard.";
+    NPCs[1].Dialogue[3] = "And he did his thing: resurrect undeads.";
+    NPCs[1].Dialogue[4] = "And that's not great, to say the least. Do you see where I'm going with this?";
+    NPCs[1].Dialogue[5] = "I need you to deal with them, at least the zombies.";
+    NPCs[1].Dialogue[6] = "You won't be left without a reward, I promise.";
+    NPCs[1].Dialogue[7] = "It seems job not done yet. Come back later, 'pal!";
+    NPCs[1].Dialogue[8] = "Oh look, youv'e did that! Here reward i promised! Good bye friend!";
+    NPCs[1].Dialogue[9] = "Hi there, how's going?";
 
     NPCs[1].quest.questTarget = "Zombie";
     NPCs[1].quest.questLineNum = 6;
@@ -128,24 +128,24 @@ int main()
     NPCs[1].quest.questCompleteLineNum = 9;
     NPCs[1].quest.questPreCompleteLineNum = 8;
     NPCs[1].quest.expReward = 550;
-    NPCs[1].quest.questReq = 1;
+    NPCs[1].quest.questReq = 6;
     NPCs[1].quest.questID = 1;
     NPCs[1].quest.questText = "Kill 6 zombies: ";
     NPCs[1].quest.questComplete = false;
 
 
-    NPCs[2].posY = 9;
-    NPCs[2].posX = 110;
-    NPCs[2].Dialogue[0] = "NPC 2; pos:(9 ,110)";
-    NPCs[2].Dialogue[1] = "Do you want something?";
-    NPCs[2].Dialogue[2] = "Hey, are you there?";
-    NPCs[2].Dialogue[3] = "Did you here me???";
-    NPCs[2].Dialogue[4] = "Bro? you okay?";
-    NPCs[2].Dialogue[5] = "Why you.. Just stands.. here...";
-    NPCs[2].Dialogue[6] = "6 And staring at me....";
-    NPCs[2].Dialogue[7] = "daadasads";
-    NPCs[2].Dialogue[8] = "8 Okay, im tired, just go away";
-    NPCs[2].Dialogue[9] = "9 Man, KYS!!!!";
+    //NPCs[2].posY = 9;
+    //NPCs[2].posX = 110;
+    NPCs[2].Dialogue[0] = "Oh, thank great Furisitraks, you here! I need your help!";
+    NPCs[2].Dialogue[1] = "I am the local magician. And you see, not the most powerful one.";
+    NPCs[2].Dialogue[2] = "And this happened because almost all the local magicians had already been recruited by that necromancer.";
+    NPCs[2].Dialogue[3] = "And now they have come for me.";
+    NPCs[2].Dialogue[4] = "I tried to raise a magic shield so that they would leave me alone.";
+    NPCs[2].Dialogue[5] = "But, alas, I didn't make it. Now they've captured my tower.";
+    NPCs[2].Dialogue[6] = "Well, I'd like to return it. Here's the key, and don't be afraid, I'm generous.";
+    NPCs[2].Dialogue[7] = "Have you already recaptured my magic tower?";
+    NPCs[2].Dialogue[8] = "Oh thank's you, thank my friend! Here, take that, it will help you!";
+    NPCs[2].Dialogue[9] = "Hello, im working now, can't talk, sorry!";
 
     NPCs[2].quest.questTarget = "Mage";
     NPCs[2].quest.questLineNum = 6;
@@ -153,24 +153,24 @@ int main()
     NPCs[2].quest.questCompleteLineNum = 9;
     NPCs[2].quest.questPreCompleteLineNum = 8;
     NPCs[2].quest.expReward = 1500;
-    NPCs[2].quest.questReq = 1;
+    NPCs[2].quest.questReq = 2;
     NPCs[2].quest.questID = 2;
     NPCs[2].quest.questText = "Kill 2 mages: ";
     NPCs[2].quest.questComplete = false;
 
 
-    NPCs[3].posX = 5;
-    NPCs[3].posY = 17;
-    NPCs[3].Dialogue[0] = "NPC 3; pos:(19 ,19)";
-    NPCs[3].Dialogue[1] = "Do you want something?";
-    NPCs[3].Dialogue[2] = "Hey, are you there?";
-    NPCs[3].Dialogue[3] = "Did you here me???";
-    NPCs[3].Dialogue[4] = "Bro? you okay?";
-    NPCs[3].Dialogue[5] = "Why you.. Just stands.. here...";
-    NPCs[3].Dialogue[6] = "6 And staring at me....";
-    NPCs[3].Dialogue[7] = "111111";
-    NPCs[3].Dialogue[8] = "8 Okay, im tired, just go away";
-    NPCs[3].Dialogue[9] = "9 Man, KYS!!!!";
+    //NPCs[3].posX = 5;
+    //NPCs[3].posY = 17;
+    NPCs[3].Dialogue[0] = "Oh, thats my brave hero! I've been waiting for you!";
+    NPCs[3].Dialogue[1] = "It's seems that you've learned a lot in your'e andenture!";
+    NPCs[3].Dialogue[2] = "But that not end yet! A final showdown is awaiting you!";
+    NPCs[3].Dialogue[3] = "Your'e destini is to fight that necromancer and became a legend!";
+    NPCs[3].Dialogue[4] = "His hiding in a cave southwest of the castle.";
+    NPCs[3].Dialogue[5] = "But be aware, most of his warriors defend their master.";
+    NPCs[3].Dialogue[6] = "Now go fulfill your destiny and save our kingdom!";
+    NPCs[3].Dialogue[7] = "Fulfill your destiny and save our kingdom! Became our legend!";
+    NPCs[3].Dialogue[8] = "I mean, you cant get here, soo";
+    NPCs[3].Dialogue[9] = "And again, you cant";
     NPCs[3].quest.questComplete = false;
 
 
@@ -192,8 +192,8 @@ int main()
     player.playerCurHealth = 100;
     player.playerАgility = 2;
     player.questsCompleted = 0;
-    int spawnY = 23;
-    int spawnX = 59;
+    int spawnY = 17;
+    int spawnX = 15;
     int bonusАgility = 0;
     int drwX, drwY, drwCounter;
 
@@ -482,7 +482,7 @@ int main()
 
             dialogueClear(39, 3);
         }
-
+        //Передвижение
         if (_kbhit()) {
             processPlayerMovement(arr, m, spawnX, spawnY, bufferX, bufferY,
                 combat, dialogue, buffer, Doors, 4, questID, textPlacementY);
@@ -588,10 +588,6 @@ int main()
                     }
                 }
             }
-            //72 Стрелка вверх
-            //80 Стрелка вниз
-            //75 Стрелка влево
-            //77 Стрелка вправо 
         }
         // Бой
         while (combat) {
@@ -748,9 +744,7 @@ int main()
                     if (questID > -1 && NPCs[questID].quest.questCounter == NPCs[questID].quest.questReq) {
                         questComplete = true;
                     }
-                    //spawnX = Enemyes[0].posX;
-                    //spawnY = Enemyes[0].posY;
-                    //arr[spawnY][spawnX] = 'O';
+
 
                     round = 0;                  //Сбрасывает счётчик раундов +небольшая задержка перед возвращением
                     Sleep(1700);
