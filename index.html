@@ -17,14 +17,19 @@
             --border: #e2e8f0;
         }
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            background: var(--bg);
-            color: #333;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: #333;
+    /* Убрали отсюда флексы, чтобы они не ломали обертку */
+}
+
+#app {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
         #sidebar {
             width: 340px;
             background: white;
