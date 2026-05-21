@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивный практикум по Vue 3</title>
+    <!-- Подключаем Vue 3 и Vue Router через официальные CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    
+    <style>
+        :root {
+            --primary: #42b883;
+            --dark: #35495e;
+            --bg: #f8f9fa;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: #333;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #sidebar {
+            width: 340px;
+            background: white;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background: var(--dark);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menu-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .menu-item:hover {
+            background: #f1f5f9;
+        }
+        .menu-item.active {
+            background: #e6f7ff;
+            color: #096dd9;
+            font-weight: 600;
+            border-right: 4px solid #1890ff;
+        }
+        .badge {
+            background: #e2e8f0;
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .active-badge {
+            background: var(--primary);
+            color: white;
+        }
+        #main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .demo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 4px 4px 4px 0;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        input[type="text"], textarea, select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin: 6px 0;
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            box-sizing: border-box;
+        }
+        .box-test {
+            padding: 20px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+            margin: 15px 0;
+        }
+        .highlight-class {
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        .danger-border {
+            border: 3px solid #ff4d4f;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- Боковое меню вопросов -->
+    <div id="sidebar">
+        <div class="sidebar-header">Vue 3 Практикум (30 тем)</div>
+        <ul class="menu-list">
+            <li v-for="t in topics" :key="t.id" class="menu-item" :class="{ active: currentTopic === t.id }" @click="currentTopic = t.id">
+                <span class="badge" :class="{ 'active-badge': currentTopic === t.id }">{{ t.id }}</span>
+                {{ t.title }}
+            </li>
+        </ul>
+    </div>
+
+    <!-- Область вывода демонстраций -->
+    <div id="main-content">
+        <h2>{{ topics.find(t => t.id === currentTopic).title }}</h2>
+        <hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 20px;">
+
+        <!-- 1. Объект Vue -->
+        <div v-if="currentTopic === 1" class="demo-card">
+            <p>Управляющий объект создан через глобальный метод <code>Vue.createApp()</code>.</p>
+            <p style="color: green; font-weight: bold;">✓ Статус: Текущая страница успешно контролируется этим инстансом.</p>
+        </div>
+
+        <!-- 2. Привязка данных -->
+        <div v-if="currentTopic === 2" class="demo-card">
+            <p>Вывод переменной через «усы»: <strong>{{ textBinding }}</strong></p>
+            <p>Динамический атрибут :href -> <a :href="dynamicUrl" target="_blank">Ссылка на документацию</a></p>
+            <button @click="textBinding = 'Данные реактивно изменились!'">Обновить текст</button>
+        </div>
+
+        <!-- 3. Обработка ввода и события -->
+        <div v-if="currentTopic === 3" class="demo-card">
+            <p>Счетчик кликов: <strong>{{ clickCount }}</strong></p>
+            <button @click="clickCount++">Обычный клик (@click)</button>
+            <button @click.once="clickCount++">Сработает только 1 раз (.once)</button>
+        </div>
+
+        <!-- 4. Двусторонняя привязка -->
+        <div v-if="currentTopic === 4" class="demo-card">
+            <input v-model="formText" placeholder="Пиши сюда...">
+            <p>Синхронный вывод: <strong>{{ formText }}</strong></p>
+        </div>
+
+        <!-- 5. Вычисляемые свойства -->
+        <div v-if="currentTopic === 5" class="demo-card">
+            <input v-model="firstName" placeholder="Имя">
+            <input v-model="lastName" placeholder="Фамилия">
+            <p>Computed свойство (Полное имя): <strong>{{ fullName }}</strong></p>
+        </div>
+
+        <!-- 6. Наблюдаемые свойства -->
+        <div v-if="currentTopic === 6" class="demo-card">
+            <input v-model="watchedText" placeholder="Поменяй меня">
+            <p style="color: #096dd9;">История изменений из watch: {{ watchHistory }}</p>
+        </div>
+
+        <!-- 7. Привязка классов CSS -->
+        <div v-if="currentTopic === 7" class="demo-card">
+            <label><input type="checkbox" v-model="classActive"> Включить класс .highlight-class (зеленый фон)</label><br>
+            <label><input type="checkbox" v-model="classDanger"> Включить класс .danger-border (красная рамка)</label>
+            <div class="box-test" :class="{ 'highlight-class': classActive, 'danger-border': classDanger }">
+                Интерактивный блок
+            </div>
+        </div>
+
+        <!-- 8. Привязка стилей -->
+        <div v-if="currentTopic === 8" class="demo-card">
+            <label>Размер шрифта ({{ dynamicSize }}px):</label>
+            <input type="range" min="14" max="36" v-model="dynamicSize"><br>
+            <label>Цвет текста:</label>
+            <input type="color" v-model="dynamicColor">
+            <p :style="{ fontSize: dynamicSize + 'px', color: dynamicColor }">Я меняю инлайновые стили на лету!</p>
+        </div>
+
+        <!-- 9. refs и управление html-элементами -->
+        <div v-if="currentTopic === 9" class="demo-card">
+            <input ref="inputRef" placeholder="Поле для фокуса">
+            <button @click="focusInputField">Вызвать inputRef.value.focus()</button>
+        </div>
+
+        <!-- 10. Жизненный цикл Vue -->
+        <div v-if="currentTopic === 10" class="demo-card">
+            <label><input type="checkbox" v-model="lifecycleToggle"> Смонтировать/Удалить дочерний компонент</label>
+            <lifecycle-widget v-if="lifecycleToggle" @log-hook="addLifecycleLog"></lifecycle-widget>
+            <h4>Журнал хуков:</h4>
+            <ul><li v-for="log in lifecycleLogs">{{ log }}</li></ul>
+        </div>
+
+        <!-- 11. Условный рендеринг -->
+        <div v-if="currentTopic === 11" class="demo-card">
+            <button @click="renderingToggle = !renderingToggle">Переключить видимость</button>
+            <div v-if="renderingToggle" style="background:#d4edda; padding:10px; margin-top:10px;">v-if: Удален или создан в DOM-дереве</div>
+            <div v-show="renderingToggle" style="background:#fff3cd; padding:10px; margin-top:10px;">v-show: Скрыт через style="display: none;"</div>
+        </div>
+
+        <!-- 12. Вывод массивов и v-for -->
+        <div v-if="currentTopic === 12" class="demo-card">
+            <ul>
+                <li v-for="item in staticList" :key="item.id">
+                    [Ключ :key="{{ item.id }}"] — {{ item.name }}
+                </li>
+            </ul>
+        </div>
+
+        <!-- 13. Управление массивами -->
+        <div v-if="currentTopic === 13" class="demo-card">
+            <button @click="pushElement">Добавить элемент (.push)</button>
+            <button @click="popElement">Удалить элемент (.pop)</button>
+            <ul><li v-for="(num, index) in editableArray" :key="index">Индекс {{ index }} -> Значение: {{ num }}</li></ul>
+        </div>
+
+        <!-- 14. Фильтрация и сортировка массива -->
+        <div v-if="currentTopic === 14" class="demo-card">
+            <input v-model="searchQuery" placeholder="Фильтр по имени...">
+            <button @click="sortDirection = 'asc'">Сортировка А-Я</button>
+            <button @click="sortDirection = 'desc'">Сортировка Я-А</button>
+            <ul><li v-for="p in filteredList" :key="p.id">{{ p.name }} ({{ p.cost }} руб.)</li></ul>
+        </div>
+
+        <!-- 15. Работа с формами: Input и Textarea -->
+        <div v-if="currentTopic === 15" class="demo-card">
+            <input v-model="formInputs.val1" type="text" placeholder="Строчный input">
+            <textarea v-model="formInputs.val2" placeholder="Многострочный textarea"></textarea>
+            <pre>Стейт формы: {{ formInputs }}</pre>
+        </div>
+
+        <!-- 16. Работа с формами: Флажки -->
+        <div v-if="currentTopic === 16" class="demo-card">
+            <label><input type="checkbox" v-model="singleCheck"> Одиночный флажок (Логический: {{ singleCheck }})</label>
+            <h4>Группа чекбоксов (Массив выбранных value):</h4>
+            <label><input type="checkbox" value="Vue" v-model="checkedGroup"> Vue</label><br>
+            <label><input type="checkbox" value="React" v-model="checkedGroup"> React</label>
+            <p>Выбранный массив в стейте: {{ checkedGroup }}</p>
+        </div>
+
+        <!-- 17. Работа с формами: Переключатели -->
+        <div v-if="currentTopic === 17" class="demo-card">
+            <label><input type="radio" value="Светлая" v-model="radioVal"> Светлая тема</label><br>
+            <label><input type="radio" value="Тёмная" v-model="radioVal"> Тёмная тема</label>
+            <p>Активное значение радиокнопки: <strong>{{ radioVal }}</strong></p>
+        </div>
+
+        <!-- 18. Работа с формами: Список select -->
+        <div v-if="currentTopic === 18" class="demo-card">
+            <select v-model="selectedCity">
+                <option value="" disabled>Выберите город</option>
+                <option value="Msk">Москва</option>
+                <option value="Spb">Санкт-Петербург</option>
+            </select>
+            <p>Выбрано: <strong>{{ selectedCity }}</strong></p>
+        </div>
+
+        <!-- 19. Работа с формами: Модификаторы полей ввода -->
+        <div v-if="currentTopic === 19" class="demo-card">
+            <label>.lazy (обновление при смене фокуса):</label>
+            <input v-model.lazy="modLazy"><span>Стейт: "{{ modLazy }}"</span><br><br>
+            
+            <label>.number (автоприведение к типу Number):</label>
+            <input v-model.number="modNumber"><span>Тип в JS: {{ typeof modNumber }}</span><br><br>
+            
+            <label>.trim (обрезка пробелов):</label>
+            <input v-model.trim="modTrim"><span>Стейт: "{{ modTrim }}"</span>
+        </div>
+
+        <!-- 20-22. Создание компонентов, Регистрация, Состояние -->
+        <div v-if="currentTopic === 20 || currentTopic === 21 || currentTopic === 22" class="demo-card">
+            <p>Ниже выведены два экземпляра одного локально зарегистрированного компонента. Их реактивные счетчики полностью изолированы друг от друга.</p>
+            <custom-counter></custom-counter>
+            <custom-counter></custom-counter>
+        </div>
+
+        <!-- 23. Разделяемое состояние компонентов -->
+        <div v-if="currentTopic === 23" class="demo-card">
+            <p>Два абсолютно разных компонента завязаны на один общий реактивный объект вне их контекста:</p>
+            <shared-widget-a></shared-widget-a>
+            <shared-widget-b></shared-widget-b>
+        </div>
+
+        <!-- 24-26. Props, валидация и сложные объекты -->
+        <div v-if="currentTopic === 24 || currentTopic === 25 || currentTopic === 26" class="demo-card">
+            <p>Родитель передает в ребенка текстовый проп и сложный массив объектов с валидацией типов данных:</p>
+            <props-receiver header="Данные внутри ребенка" :items="staticList"></props-receiver>
+        </div>
+
+        <!-- 27-28. Компоненты и кастомные события (Emits) -->
+        <div v-if="currentTopic === 27 || currentTopic === 28" class="demo-card">
+            <p>Поймано из дочернего компонента: <strong style="color:red;">{{ eventData }}</strong></p>
+            <emits-sender @send-signal="captureSignal"></emits-sender>
+        </div>
+
+        <!-- 29. Слоты -->
+        <div v-if="currentTopic === 29" class="demo-card">
+            <slot-box>
+                <template #named-slot>
+                    <h3 style="margin:0; color:#1890ff;">Заголовок, переданный в именованный слот!</h3>
+                </template>
+                <p>А этот текст залетел в дефолтный неименованный слот компонента.</p>
+            </slot-box>
+        </div>
+
+        <!-- 30. Определение маршрутов, навигация и ссылки -->
+        <div v-if="currentTopic === 30" class="demo-card">
+            <p>Полноценная работа Vue Router на базе безопасной локальной Hash-истории (смотри на адресную строку браузера при кликах):</p>
+            <div style="background:#f1f5f9; padding: 15px; border-radius:8px;">
+                <nav>
+                    <a href="#/demo/home" style="margin-right:15px; font-weight:bold; color:var(--primary)">Главная роута</a>
+                    <a href="#/demo/user/451" style="font-weight:bold; color:var(--primary)">Профиль (Параметр ID: 451)</a>
+                </nav>
+                <div style="background:white; padding:15px; border-radius:6px; margin-top:10px; border:1px solid #ddd;">
+                    <!-- Сюда подставляются компоненты роутера -->
+                    <router-view></router-view>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Глобальное разделяемое состояние (для пункта 23)
+    const sharedReactiveState = Vue.ref("Общий текст");
+
+    // Определение суб-компонентов
+    const LifecycleWidget = {
+        template: `<div style="background:#e6f7ff; padding:10px; border:1px solid #91d5ff; margin-top:10px;">Я живой дочерний виджет!</div>`,
+        emits: ['log-hook'],
+        setup(props, { emit }) {
+            Vue.onMounted(() => emit('log-hook', 'onMounted сработал'));
+            Vue.onUnmounted(() => emit('log-hook', 'onUnmounted сработал'));
+        }
+    };
+
+    const CustomCounter = {
+        template: `<div style="padding:10px; border:1px solid #ddd; border-radius:6px; margin-bottom:10px;">
+            <span>Счетчик: {{ count }} </span><button @click="count++">+1</button>
+        </div>`,
+        setup() {
+            const count = Vue.ref(0);
+            return { count };
+        }
+    };
+
+    const SharedWidgetA = {
+        template: `<div style="background:#fffbe6; padding:10px; margin-bottom:10px;">Виджет А (ввод): <input v-model="state"></div>`,
+        setup() { return { state: sharedReactiveState } }
+    };
+    const SharedWidgetB = {
+        template: `<div style="background:#e6fffb; padding:10px;">Виджет Б (вывод): <strong>{{ state }}</strong></div>`,
+        setup() { return { state: sharedReactiveState } }
+    };
+
+    const PropsReceiver = {
+        props: {
+            header: { type: String, required: true },
+            items: { type: Array, default: () => [] }
+        },
+        template: `<div>
+            <h4>{{ header }}</h4>
+            <ul><li v-for="i in items" :key="i.id">{{ i.name }}</li></ul>
+        </div>`
+    };
+
+    const EmitsSender = {
+        emits: ['send-signal'],
+        template: `<button @click="$emit('send-signal', 'Привет из глубин дочернего компонента!')">Сгенерировать событие ($emit)</button>`
+    };
+
+    const SlotBox = {
+        template: `<div style="border:1px dashed var(--primary); padding:15px; border-radius:8px;">
+            <div style="background:#f9f9f9; padding:5px; border-bottom:1px solid #eee;"><slot name="named-slot"></slot></div>
+            <div style="padding-top:10px;"><slot></slot></div>
+        </div>`
+    };
+
+    // Компоненты страниц для Vue Router (пункт 30)
+    const RouterHome = { template: '<div>[Компонент: Home] Добро пожаловать на домашнюю страницу роутера!</div>' };
+    const RouterUser = { template: '<div>[Компонент: User] ID профиля из параметров ссылки: <strong style="color:blue">{{ $route.params.id }}</strong></div>' };
+
+    // Конфигурация роутера
+    const router = VueRouter.createRouter({
+        history: VueRouter.createWebHashHistory(),
+        routes: [
+            { path: '/demo/home', component: RouterHome },
+            { path: '/demo/user/:id', component: RouterUser },
+            { path: '/:catchAll(.*)', redirect: '/demo/home' } // Фоллбэк редирект
+        ]
+    });
+
+    // Главное приложение Vue
+    const app = Vue.createApp({
+        components: {
+            LifecycleWidget, CustomCounter, SharedWidgetA, SharedWidgetB, PropsReceiver, EmitsSender, SlotBox
+        },
+        setup() {
+            const topics = [
+                { id: 1, title: "1. Объект Vue (createApp)" },
+                { id: 2, title: "2. Привязка данных (Интерполяция и атрибуты)" },
+                { id: 3, title: "3. Обработка ввода и события (@click)" },
+                { id: 4, title: "4. Двусторонняя привязка (v-model)" },
+                { id: 5, title: "5. Вычисляемые свойства (computed)" },
+                { id: 6, title: "6. Наблюдаемые свойства (watch)" },
+                { id: 7, title: "7. Привязка классов CSS (:class)" },
+                { id: 8, title: "8. Привязка стилей (:style)" },
+                { id: 9, title: "9. refs и управление HTML-элементами" },
+                { id: 10, title: "10. Жизненный цикл Vue (хуки)" },
+                { id: 11, title: "11. Условный рендеринг (v-if / v-show)" },
+                { id: 12, title: "12. Вывод массивов и директива v-for" },
+                { id: 13, title: "13. Управление массивами (Реактивность)" },
+                { id: 14, title: "14. Фильтрация и сортировка массива" },
+                { id: 15, title: "15. Формы: Input и Textarea" },
+                { id: 16, title: "16. Формы: Флажки (Checkbox)" },
+                { id: 17, title: "17. Формы: Переключатели (Radiobutton)" },
+                { id: 18, title: "18. Формы: Список select" },
+                { id: 19, title: "19. Формы: Модификаторы полей" },
+                { id: 20, title: "20-22. Создание, регистрация и стейт компонентов" },
+                { id: 23, title: "23. Разделяемое состояние компонентов" },
+                { id: 24, title: "24-26. Props, Валидация и сложные объекты" },
+                { id: 27, title: "27-28. Компоненты: Родители/Дети и События" },
+                { id: 29, title: "29. Слоты (Slots)" },
+                { id: 30, title: "30. Определение маршрутов, навигация (Router)" }
+            ];
+
+            const currentTopic = Vue.ref(1);
+
+            // Состояния реактивных стендов
+            const textBinding = Vue.ref("Изначальный текст");
+            const dynamicUrl = Vue.ref("https://vuejs.org/");
+            const clickCount = Vue.ref(0);
+            const formText = Vue.ref("");
+            const firstName = Vue.ref("");
+            const lastName = Vue.ref("");
+            const watchedText = Vue.ref("");
+            const watchHistory = Vue.ref("нет данных");
+            const classActive = Vue.ref(false);
+            const classDanger = Vue.ref(false);
+            const dynamicSize = Vue.ref(16);
+            const dynamicColor = Vue.ref("#333333");
+            const inputRef = Vue.ref(null);
+            const lifecycleToggle = Vue.ref(false);
+            const lifecycleLogs = Vue.ref([]);
+            const renderingToggle = Vue.ref(true);
+            const editableArray = Vue.ref([1, 2, 3]);
+            const searchQuery = Vue.ref("");
+            const sortDirection = Vue.ref("asc");
+            const singleCheck = Vue.ref(false);
+            const checkedGroup = Vue.ref([]);
+            const radioVal = Vue.ref("Светлая");
+            const selectedCity = Vue.ref("");
+            const modLazy = Vue.ref("");
+            const modNumber = Vue.ref(0);
+            const modTrim = Vue.ref("");
+            const eventData = Vue.ref("ожидание сигнала...");
+
+            const staticList = Vue.ref([
+                { id: 10, name: "Хлеб", cost: 50 },
+                { id: 20, name: "Молоко", cost: 90 },
+                { id: 30, name: "Яблоки", cost: 140 }
+            ]);
+
+            // 5. Computed
+            const fullName = Vue.computed(() => `${firstName.value} ${lastName.value}`.trim() || 'Заполните поля...');
+
+            // 6. Watcher
+            Vue.watch(watchedText, (newV, oldV) => {
+                watchHistory.value = `было: "${oldV}" -> стало: "${newV}"`;
+            });
+
+            // 14. Сортировка и фильтрация списка через Computed
+            const filteredList = Vue.computed(() => {
+                let res = staticList.value.filter(item => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+                return res.sort((a, b) => {
+                    return sortDirection.value === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+                });
+            });
+
+            // Форма 15
+            const formInputs = Vue.reactive({ val1: "", val2: "" });
+
+            // Методы
+            const focusInputField = () => inputRef.value.focus();
+            const addLifecycleLog = (msg) => lifecycleLogs.value.unshift(`${new Date().toLocaleTimeString()}: ${msg}`);
+            const pushElement = () => editableArray.value.push(Math.floor(Math.random() * 100));
+            const popElement = () => editableArray.value.pop();
+            const captureSignal = (payload) => eventData.value = payload;
+
+            return {
+                topics, currentTopic, textBinding, dynamicUrl, clickCount, formText, firstName, lastName, fullName,
+                watchedText, watchHistory, classActive, classDanger, dynamicSize, dynamicColor, inputRef, focusInputField,
+                lifecycleToggle, lifecycleLogs, addLifecycleLog, renderingToggle, staticList, editableArray, pushElement,
+                popElement, searchQuery, sortDirection, filteredList, formInputs, singleCheck, checkedGroup, radioVal,
+                selectedCity, modLazy, modNumber, modTrim, eventData, captureSignal
+            };
+        }
+    });
+
+    app.use(router);
+    app.mount('#app');
+</script>
+</body>
+</html>
